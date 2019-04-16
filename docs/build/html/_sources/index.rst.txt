@@ -1,8 +1,10 @@
 .. title:: Home
 
-.. _Github: https://github.com/aaronyaosmith/HG_marker_detection
+.. _Github: https://github.com/MSingerLab/COMETSC
 
-.. _website: http://www.cometsc.com/login
+.. _website: http://www.cometsc.com/index
+
+.. |poster| image:: _static/Comet_Poster_fin_2.png
 
 .. |comet| image:: _static/COMET.png
    :width: 25%
@@ -11,7 +13,11 @@
 
 **COMET: Identifying candidate marker panels from single-cell transcriptomic data.**
 
-Official documentation for COMET version |release|.
+Official documentation for COMET Beta version.
+
+For a simple picture of what COMET is and how it operates, the following is our poster from multiple conference presentations.
+
+|poster|
 
 Start with :doc:`Quickstart<quickstart>`, or jump right into the :doc:`User Manual<manual>`.
 

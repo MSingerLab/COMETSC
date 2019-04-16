@@ -1,4 +1,4 @@
-.. _website: http://www.cometsc.com/login
+.. _website: http://www.cometsc.com/index
 
 User Manual
 ============

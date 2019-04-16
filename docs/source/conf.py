@@ -5,8 +5,8 @@ sys.path.insert(0, os.path.abspath('../..'))
 
 project = 'COMET'
 highlight_language = 'python'
-copyright = '2018, Aaron Yao-Smith'
-author = 'Aaron Yao-Smith'
+copyright = '2019, Meromit Singer'
+author = 'Conor Delaney'
 # version and release are intended to provide a separation between 'X.Y' short
 # version number ('version') and 'X.Y.Z-A.B' full release number
 # ('release'). We don't need this separation, so set both to same value to

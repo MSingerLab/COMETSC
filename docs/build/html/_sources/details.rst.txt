@@ -16,16 +16,16 @@ COMET iterates sequentially through all user-specified clusters, generating stat
 
 *First, continuous expression values are converted to discrete via the XL-mHG test. Then, genes are combined and their combinations tests via the hypergeometric test. Finally, these combinations are ranked, assessed, and plotted.*
 
-1. Read in data from CSV.
+1. Read in data from TXT.
 ------------------------------
 
-User-specified data is read in via CSV format (currently, requiring comma delimiters.) See :doc:`Usage<usage>` for details of the format of this data.
+User-specified data is read in via TXT format (currently, requiring tab delimiters.) See :doc:`Usage<usage>` for details of the format of this data.
 
 There are three components:
 
 * Per-cell gene expression values. Each gene must be normalized over cells.
 * Cluster membership by cell.
-* Per-cell 2-D tSNE values, for plotting.
+* Per-cell 2-D t-SNE values, for plotting.
 
 In order to test 'complement' genes (i.e. expressed as the absence of a gene rather than the presence of a gene), COMET creates a new complement gene for each gene. These complement genes are treated exactly the same as normal genes, but their expression values are the negative of the expression values of their analogous gene. This allows COMET to find separate mHG cutoff values for genes and their complements.
 
@@ -91,11 +91,7 @@ Ranking single genes and gene combinations according to their potential as marke
 7. Calculate true positive/negative.
 -------------------------------------
 
-Once COMET has ranked all gene combinations using the corresponding hypergeometric p-value, it reports True Positive and True Negative rates associated with each gene combination, using the matrix products found earlier. As a reminder, True Positive rate is found by dividing the number of expressing cells in the cluster by the total cell count of the cluster; true negative is found by dividing the number of expressing cells outside the cluster by the total cell count outside the cluster. Using the hypergeometric notation discussed earlier, we can write:
-
-.. math::
-
-   \text{true positive} = \frac{k}{s} \quad \text{true negative} = \frac{M}{N}
+Once COMET has ranked all gene combinations using the corresponding hypergeometric p-value, it reports True Positive and True Negative rates associated with each gene combination, using the matrix products found earlier. As a reminder, True Positive rate is found by dividing the number of expressing cells in the cluster by the total cell count of the cluster; true negative is found by dividing the number of non-expressing cells outside the cluster by the total cell count outside the cluster.
    
 
 8. Export statistical results.
@@ -103,7 +99,7 @@ Once COMET has ranked all gene combinations using the corresponding hypergeometr
 
 COMET's statistical results are exported to two CSV files per cluster: one including statistical values for exclusively singletons, and one including all combinations. Rows are genes or gene combinations, columns are values associated with that gene/combination.
 
-The columns of the singleton statistical data are:
+The columns of the statistical data are:
 
 * ``gene``: the name of the gene.
 * ``HG_stat``: the hypergeometric test statistic. Genes are ranked using this value.
@@ -114,6 +110,7 @@ The columns of the singleton statistical data are:
 * ``t_pval``: the t-test p significance value corresponding to the test statistic.
 * ``TP``: the true positive rate.
 * ``TN``: the true negative rate.
+* ``FoldChange``: the log base 2 fold change of a single gene from the cluster of interest compared to the rest of the cells.
 * ``init rank``: sequential ranking based on ``HG_stat``, where lower ``HG_stat`` is better ranking. No two genes are ranked the same; those with identical hypergeometric statistic values are ranked arbitrarily relative to one another.
 * ``CCS``: Cluster Clear Score. This gives us a statistic for the clearing out of other clusters with the addition of the second gene in comparison with the single gene case. The 'lead gene' is whichever of the pair has the smallest p-value, then we compute weighted True Negative deltas across the other clusters for the lead gene and the pair. This is only computed for a certain number of the top performing 'init rank' gene combinations.
 * ``rank``: Final rank. Takes the average of the the init rank and the CCS to determine which gene combinations are the best performing in both tests.
@@ -124,15 +121,14 @@ The columns of the singleton statistical data are:
 9. Generate and export visualizations.
 -----------------------------------------
 
-For each cluster, COMET generates five PDF files containing visualizations of the statistical results. Each PDF``s name is prefixed by the cluster name, and includes visuals for only the first few highest ranked genes/combinations.
+For each cluster, COMET generates five - seven PNG file folders containing visualizations of the statistical results. Each folder's name is prefixed by the cluster name, and includes visuals for only the first few highest ranked genes/combinations. The 'rank' stated in the folder is the rank amongst ONLY those which were plotted, therefore it does not necessarily reflect the actual rank from the data.
 
-The PDF files are:
+The folders are:
 
-* ``(cluster)_combined.pdf``: compares discrete expression and continuous expression for each gene in a combination on a tSNE plot.
-* ``(cluster)_discrete.pdf``: compares discrete expression of a gene combination with that of its components.
-* ``(cluster)_TP_TN.pdf``: plots true positive/negative rates of each gene.
-* ``(cluster)_singleton_combined.pdf``: same as the ``combined`` plot, but includes only singletons.
-* ``(cluster)_singleton_TP_TN.pdf``: same as the ``TP_TN`` plot, but includes only singletons.
-* ``(cluster)_discrete_trips.pdf``: compares discrete expression of a gene combination with that of its components, but there are three.
-* ``(cluster)_pair_histogram.pdf``: gives a bar graph of the top appearing genes in the pairs. Should give a good idea of the landscape of the best performing pairs.
+* ``(cluster)_pairs_as_singletons``: compares discrete expression and continuous expression for each gene in a combination on a t-SNE plot.
+* ``(cluster)_discrete_pairs``: compares discrete expression of a gene combination with that of its components.
+* ``(cluster)_pair_TP_TN``: plots true positive/negative rates of each gene.
+* ``(cluster)_singleton``: same as the ``combined`` plot, but includes only singletons.
+* ``(cluster)_singleton_TP_TN``: same as the ``TP_TN`` plot, but includes only singletons.
+* ``(cluster)_discrete_trios``: compares discrete expression of a gene combination with that of its components, but there are three.
 .. toctree::

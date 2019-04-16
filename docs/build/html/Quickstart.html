@@ -13,7 +13,6 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="_static/COMET_favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -37,14 +36,14 @@
             
   <div class="section" id="installation-quickstart">
 <h1>Installation/Quickstart<a class="headerlink" href="#installation-quickstart" title="Permalink to this headline">¶</a></h1>
-<p>To skip installation on your own machine and run COMET on your data on COMET’s servers, check out our <a class="reference external" href="http://www.cometsc.com/login">website</a>!</p>
+<p>To skip installation on your own machine and run COMET on your data on COMET’s servers, check out our <a class="reference external" href="http://www.cometsc.com/index">website</a>!</p>
 <p>To install COMET’s Python implementation on your own machine, you should first have <a class="reference external" href="https://www.python.org/downloads/">Python</a> version 3.6 installed.</p>
 <p>The easiest way to install the package is to simply run in the terminal:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install HGMarkerDetection
 </pre></div>
 </div>
 <p>This will auto-download the depencencies necessary for running the
-tool. If you prefer to download the source code directly, you can clone the COMET source from our <a class="reference external" href="https://github.com/aaronyaosmith/HG_marker_detection">Github</a>, navigate to the cloned directory, then install it using Python.</p>
+tool. If you prefer to download the source code directly, you can clone the COMET source from our <a class="reference external" href="https://github.com/MSingerLab/COMETSC">Github</a>, navigate to the cloned directory, then install it using Python.</p>
 <p>Now, run COMET on your data. Give the files of your data as the first
 three arguments and your desired output directory as your second argument.</p>
 <p>In this Beta stage of COMET’s development, your data must be formatted into three files in your input directory: ‘markers.txt’, ‘cluster.txt’, and ‘tsne.txt’. See the <a class="reference internal" href="manual.html"><span class="doc">Manual</span></a> for more information.</p>
@@ -55,17 +54,11 @@ three arguments and your desired output directory as your second argument.</p>
 <span class="go">         [-K [K]]</span>
 </pre></div>
 </div>
-<p>After this command is entered, COMET will run in the terminal, processing your data. See <a class="reference internal" href="Output.html"><span class="doc">Output</span></a> for details on what this should look like.</p>
+<p>After this command is entered, COMET will run in the terminal, processing your data. See <span class="xref std std-doc">Examples</span> for details on what this should look like.</p>
 <p>The optional statements are described as follows:</p>
-<table class="docutils option-list" frame="void" rules="none">
-<col class="option" />
-<col class="description" />
-<tbody valign="top">
-<tr><td class="option-group">
-<kbd><span class="option">-h</span></kbd></td>
-<td>Help.</td></tr>
-</tbody>
-</table>
+<p>-h ()</p>
+<blockquote>
+<div>Help.</div></blockquote>
 <p>-g (.txt)</p>
 <blockquote>
 <div>Optional gene list. Pointing -g to a text file with a list of
@@ -100,16 +93,9 @@ defaults to 2, can be at most 3 (for the time being). Should only
 be either 2 or 3. Will be extended to 4 gene combinations in the
 future.</div></blockquote>
 </div>
-<div class="section" id="common-installation-problems">
-<h1>Common Installation Problems:<a class="headerlink" href="#common-installation-problems" title="Permalink to this headline">¶</a></h1>
-<p>Matplotlib failing -&gt; Sometimes the bare installation of matplotlib
-can cause problems with the ‘backend’ setting. Maneuvering to the file
-‘matplotlibrc’ in the site packages and changing the backend variable
-to ‘Agg’ will fix this problem. Unrelated to COMET but common issue we
-ran into.</p>
-<p>General python -&gt; Most python problems are fixed by installing
-virtualenv and setting up a virtual environment for your project with
-python 3.6.X . Check out <a class="reference external" href="https://docs.python-guide.org/dev/virtualenvs/">https://docs.python-guide.org/dev/virtualenvs/</a></p>
+<div class="section" id="troubleshooting">
+<h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h1>
+<p>There has been a known issue with the compatibility of matplotlib with certain installations. A fix that has been successful in most test cases can be found at <a class="reference external" href="https://stackoverflow.com/questions/21784641/installation-issue-with-matplotlib-python">matplotlib</a> , consisting of changing the matplotlibrc ‘backend’ variable to either ‘Agg’ or ‘TkAgg’.</p>
 <div class="toctree-wrapper compound">
 </div>
 </div>
@@ -133,7 +119,7 @@ python 3.6.X . Check out <a class="reference external" href="https://docs.python
 <h3>Navigation</h3>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation/Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#common-installation-problems">Common Installation Problems:</a><ul class="simple">
+<li class="toctree-l1"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html">User Manual</a></li>
@@ -174,7 +160,7 @@ python 3.6.X . Check out <a class="reference external" href="https://docs.python
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018, Aaron Yao-Smith.
+      &copy;2019, Meromit Singer.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>

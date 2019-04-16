@@ -13,7 +13,6 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="_static/COMET_favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -41,7 +40,7 @@
 <div class="contents local topic" id="per-cluster-program-flow">
 <p class="topic-title first">Per-cluster program flow</p>
 <ul class="simple">
-<li><a class="reference internal" href="#read-in-data-from-csv" id="id1">1. Read in data from CSV.</a></li>
+<li><a class="reference internal" href="#read-in-data-from-txt" id="id1">1. Read in data from TXT.</a></li>
 <li><a class="reference internal" href="#run-xl-mhg-tests-on-singletons" id="id2">2. Run XL-mHG tests on singletons.</a></li>
 <li><a class="reference internal" href="#slide-xl-mhg-cutoff-values" id="id3">3. ‘Slide’ XL-mHG cutoff values.</a></li>
 <li><a class="reference internal" href="#generate-discrete-expression-matrix-using-cutoffs" id="id4">4. Generate discrete expression matrix using cutoffs.</a></li>
@@ -59,14 +58,14 @@
 <p><img alt="flow" src="_images/flow.jpg" /></p>
 <p><em>A simplified version of the program flow.</em></p>
 <p><em>First, continuous expression values are converted to discrete via the XL-mHG test. Then, genes are combined and their combinations tests via the hypergeometric test. Finally, these combinations are ranked, assessed, and plotted.</em></p>
-<div class="section" id="read-in-data-from-csv">
-<h2><a class="toc-backref" href="#id1">1. Read in data from CSV.</a><a class="headerlink" href="#read-in-data-from-csv" title="Permalink to this headline">¶</a></h2>
-<p>User-specified data is read in via CSV format (currently, requiring comma delimiters.) See <a class="reference internal" href="usage.html"><span class="doc">Usage</span></a> for details of the format of this data.</p>
+<div class="section" id="read-in-data-from-txt">
+<h2><a class="toc-backref" href="#id1">1. Read in data from TXT.</a><a class="headerlink" href="#read-in-data-from-txt" title="Permalink to this headline">¶</a></h2>
+<p>User-specified data is read in via TXT format (currently, requiring tab delimiters.) See <a class="reference internal" href="usage.html"><span class="doc">Usage</span></a> for details of the format of this data.</p>
 <p>There are three components:</p>
 <ul class="simple">
 <li>Per-cell gene expression values. Each gene must be normalized over cells.</li>
 <li>Cluster membership by cell.</li>
-<li>Per-cell 2-D tSNE values, for plotting.</li>
+<li>Per-cell 2-D t-SNE values, for plotting.</li>
 </ul>
 <p>In order to test ‘complement’ genes (i.e. expressed as the absence of a gene rather than the presence of a gene), COMET creates a new complement gene for each gene. These complement genes are treated exactly the same as normal genes, but their expression values are the negative of the expression values of their analogous gene. This allows COMET to find separate mHG cutoff values for genes and their complements.</p>
 </div>
@@ -114,14 +113,12 @@ These parameters are usually referred to as <strong>k</strong>, <strong>s</stron
 </div>
 <div class="section" id="calculate-true-positive-negative">
 <h2><a class="toc-backref" href="#id9">7. Calculate true positive/negative.</a><a class="headerlink" href="#calculate-true-positive-negative" title="Permalink to this headline">¶</a></h2>
-<p>Once COMET has ranked all gene combinations using the corresponding hypergeometric p-value, it reports True Positive and True Negative rates associated with each gene combination, using the matrix products found earlier. As a reminder, True Positive rate is found by dividing the number of expressing cells in the cluster by the total cell count of the cluster; true negative is found by dividing the number of expressing cells outside the cluster by the total cell count outside the cluster. Using the hypergeometric notation discussed earlier, we can write:</p>
-<div class="math notranslate nohighlight">
-\[\text{true positive} = \frac{k}{s} \quad \text{true negative} = \frac{M}{N}\]</div>
+<p>Once COMET has ranked all gene combinations using the corresponding hypergeometric p-value, it reports True Positive and True Negative rates associated with each gene combination, using the matrix products found earlier. As a reminder, True Positive rate is found by dividing the number of expressing cells in the cluster by the total cell count of the cluster; true negative is found by dividing the number of non-expressing cells outside the cluster by the total cell count outside the cluster.</p>
 </div>
 <div class="section" id="export-statistical-results">
 <h2><a class="toc-backref" href="#id10">8. Export statistical results.</a><a class="headerlink" href="#export-statistical-results" title="Permalink to this headline">¶</a></h2>
 <p>COMET’s statistical results are exported to two CSV files per cluster: one including statistical values for exclusively singletons, and one including all combinations. Rows are genes or gene combinations, columns are values associated with that gene/combination.</p>
-<p>The columns of the singleton statistical data are:</p>
+<p>The columns of the statistical data are:</p>
 <ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">gene</span></code>: the name of the gene.</li>
 <li><code class="docutils literal notranslate"><span class="pre">HG_stat</span></code>: the hypergeometric test statistic. Genes are ranked using this value.</li>
@@ -132,6 +129,7 @@ These parameters are usually referred to as <strong>k</strong>, <strong>s</stron
 <li><code class="docutils literal notranslate"><span class="pre">t_pval</span></code>: the t-test p significance value corresponding to the test statistic.</li>
 <li><code class="docutils literal notranslate"><span class="pre">TP</span></code>: the true positive rate.</li>
 <li><code class="docutils literal notranslate"><span class="pre">TN</span></code>: the true negative rate.</li>
+<li><code class="docutils literal notranslate"><span class="pre">FoldChange</span></code>: the log base 2 fold change of a single gene from the cluster of interest compared to the rest of the cells.</li>
 <li><code class="docutils literal notranslate"><span class="pre">init</span> <span class="pre">rank</span></code>: sequential ranking based on <code class="docutils literal notranslate"><span class="pre">HG_stat</span></code>, where lower <code class="docutils literal notranslate"><span class="pre">HG_stat</span></code> is better ranking. No two genes are ranked the same; those with identical hypergeometric statistic values are ranked arbitrarily relative to one another.</li>
 <li><code class="docutils literal notranslate"><span class="pre">CCS</span></code>: Cluster Clear Score. This gives us a statistic for the clearing out of other clusters with the addition of the second gene in comparison with the single gene case. The ‘lead gene’ is whichever of the pair has the smallest p-value, then we compute weighted True Negative deltas across the other clusters for the lead gene and the pair. This is only computed for a certain number of the top performing ‘init rank’ gene combinations.</li>
 <li><code class="docutils literal notranslate"><span class="pre">rank</span></code>: Final rank. Takes the average of the the init rank and the CCS to determine which gene combinations are the best performing in both tests.</li>
@@ -142,16 +140,15 @@ These parameters are usually referred to as <strong>k</strong>, <strong>s</stron
 </div>
 <div class="section" id="generate-and-export-visualizations">
 <h2><a class="toc-backref" href="#id11">9. Generate and export visualizations.</a><a class="headerlink" href="#generate-and-export-visualizations" title="Permalink to this headline">¶</a></h2>
-<p>For each cluster, COMET generates five PDF files containing visualizations of the statistical results. Each PDF``s name is prefixed by the cluster name, and includes visuals for only the first few highest ranked genes/combinations.</p>
-<p>The PDF files are:</p>
+<p>For each cluster, COMET generates five - seven PNG file folders containing visualizations of the statistical results. Each folder’s name is prefixed by the cluster name, and includes visuals for only the first few highest ranked genes/combinations. The ‘rank’ stated in the folder is the rank amongst ONLY those which were plotted, therefore it does not necessarily reflect the actual rank from the data.</p>
+<p>The folders are:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">(cluster)_combined.pdf</span></code>: compares discrete expression and continuous expression for each gene in a combination on a tSNE plot.</li>
-<li><code class="docutils literal notranslate"><span class="pre">(cluster)_discrete.pdf</span></code>: compares discrete expression of a gene combination with that of its components.</li>
-<li><code class="docutils literal notranslate"><span class="pre">(cluster)_TP_TN.pdf</span></code>: plots true positive/negative rates of each gene.</li>
-<li><code class="docutils literal notranslate"><span class="pre">(cluster)_singleton_combined.pdf</span></code>: same as the <code class="docutils literal notranslate"><span class="pre">combined</span></code> plot, but includes only singletons.</li>
-<li><code class="docutils literal notranslate"><span class="pre">(cluster)_singleton_TP_TN.pdf</span></code>: same as the <code class="docutils literal notranslate"><span class="pre">TP_TN</span></code> plot, but includes only singletons.</li>
-<li><code class="docutils literal notranslate"><span class="pre">(cluster)_discrete_trips.pdf</span></code>: compares discrete expression of a gene combination with that of its components, but there are three.</li>
-<li><code class="docutils literal notranslate"><span class="pre">(cluster)_pair_histogram.pdf</span></code>: gives a bar graph of the top appearing genes in the pairs. Should give a good idea of the landscape of the best performing pairs.</li>
+<li><code class="docutils literal notranslate"><span class="pre">(cluster)_pairs_as_singletons</span></code>: compares discrete expression and continuous expression for each gene in a combination on a t-SNE plot.</li>
+<li><code class="docutils literal notranslate"><span class="pre">(cluster)_discrete_pairs</span></code>: compares discrete expression of a gene combination with that of its components.</li>
+<li><code class="docutils literal notranslate"><span class="pre">(cluster)_pair_TP_TN</span></code>: plots true positive/negative rates of each gene.</li>
+<li><code class="docutils literal notranslate"><span class="pre">(cluster)_singleton</span></code>: same as the <code class="docutils literal notranslate"><span class="pre">combined</span></code> plot, but includes only singletons.</li>
+<li><code class="docutils literal notranslate"><span class="pre">(cluster)_singleton_TP_TN</span></code>: same as the <code class="docutils literal notranslate"><span class="pre">TP_TN</span></code> plot, but includes only singletons.</li>
+<li><code class="docutils literal notranslate"><span class="pre">(cluster)_discrete_trios</span></code>: compares discrete expression of a gene combination with that of its components, but there are three.</li>
 </ul>
 <div class="toctree-wrapper compound">
 </div>
@@ -176,10 +173,13 @@ These parameters are usually referred to as <strong>k</strong>, <strong>s</stron
 
 <h3>Navigation</h3>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Installation/Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html#troubleshooting">Troubleshooting</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="manual.html">User Manual</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="background.html">Background</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Details of operation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="usage.html">Input formatting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Output.html">Output</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
@@ -221,7 +221,7 @@ These parameters are usually referred to as <strong>k</strong>, <strong>s</stron
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018, Aaron Yao-Smith.
+      &copy;2019, Meromit Singer.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>

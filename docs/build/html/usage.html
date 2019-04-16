@@ -13,10 +13,10 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="_static/COMET_favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Output" href="Output.html" />
     <link rel="prev" title="Details of operation" href="details.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -37,32 +37,37 @@
   <div class="section" id="input-formatting">
 <h1>Input formatting<a class="headerlink" href="#input-formatting" title="Permalink to this headline">¶</a></h1>
 <p>Before you use COMET with gene expression data, your data should be
-formatted into 3 files as shown below. Once the CSV’s look good,
-simply rename the extension to ‘.txt’.</p>
-<ul>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">markers.txt</span></code>: a table in CSV format in a TXT file. The first row
-of the table lists cell names, while the first column
-lists genes (all caps) , the cell at the very top left should be
+formatted into 3 files as shown below. The tables below are shown in excel format
+for ease of view, but files should be given as plain text files.</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">markers.txt</span></code>: The expression matrix table stored as a TXT file (.txt). The columns
+of the table lists cell names, while the rows
+lists genes. The cell at the very top left should be
 blank. Each element in the rest of the table should contain a
 numerical gene expression value, corresponding to the row/cell and
-column/gene of the element. Comma delimited only.</p>
-<p><img alt="markers" src="_images/markers_format.png" /></p>
-</li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">tsne.txt</span></code>: a table in CSV format, of three columns without column
-labels. The first column is cell name (the same as those in
-<code class="docutils literal notranslate"><span class="pre">markers.txt</span></code>), the second is the tSNE_1 value for the cell, and
-the third is the tSNE_2 value for the cell. Comma delimited only.</p>
-<p><img alt="tsne" src="_images/tsne_format.png" /></p>
-</li>
-<li><p class="first"><code class="docutils literal notranslate"><span class="pre">cluster.txt</span></code>: a table in CSV format, of two columns without
-column labels. The first column is cell name (consistent with
-<code class="docutils literal notranslate"><span class="pre">markers.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">tsne.txt</span></code>), and the second is the cluster of
-which the cell is a member. Cluster numbers should start from 1 and
-Cluster names should avoid using punctuation marks. Comma delimited only.</p>
+column/gene of the element. Tab delimited only. COMET does not do any preprocessing on
+this file.</li>
+<li><code class="docutils literal notranslate"><span class="pre">tsne.txt</span></code>: The t-SNE data stored as a TXT file (.txt). Consists of three columns separated by tabs,
+the first column is cell name (the same as those in
+<code class="docutils literal notranslate"><span class="pre">markers.txt</span></code>), the second is the t-SNE_1 value for the cell, and
+the third is the t-SNE_2 value for the cell. Tab delimited only.</li>
+</ul>
+<p><strong>THIS DOES NOT HAVE TO BE TSNE. Any 2-d visualization is fine (e.g. UMAP)</strong></p>
+<blockquote>
+<div><img alt="tsne" src="_images/tsne_format.png" /></div></blockquote>
+<ul>
+<li><p class="first"><code class="docutils literal notranslate"><span class="pre">cluster.txt</span></code>: The cluster assignments for cells stored as a TXT file (.txt).
+The first column is cell name (consistent with
+<code class="docutils literal notranslate"><span class="pre">markers.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">tsne.txt</span></code>) and the second is the cluster of
+which the cell is a member. Cell names should avoid using punctuation marks. Tab delimited only.
+Please note: If you input clusters that start counting at zero, COMET will change the 0th cluster to the next highest
+from the max to avoid some computational problems. E.G. -&gt; Clusters 0,1,2,3 turn to Clusters 1,2,3,4 where 0 is now 4.
+Values have not been shifted, the 0 has simply been renamed to 4 while 1, 2, and 3 all stay the same.</p>
 <p><img alt="cluster" src="_images/cluster_format.png" /></p>
 </li>
 <li><p class="first"><code class="docutils literal notranslate"><span class="pre">gene_list</span></code>: A list of genes to use for filtering in your
-data. Should be comma delimited and in all caps.</p>
+data. An optional addition, but when used COMET will only consider the genes submitted here.
+By default COMET will use our own list of surface marking genes. Can be comma delimited on a single line or one gene per line, no commas.</p>
 </li>
 </ul>
 <div class="toctree-wrapper compound">
@@ -87,10 +92,13 @@ data. Should be comma delimited and in all caps.</p>
 
 <h3>Navigation</h3>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Installation/Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html#troubleshooting">Troubleshooting</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="manual.html">User Manual</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="background.html">Background</a></li>
 <li class="toctree-l2"><a class="reference internal" href="details.html">Details of operation</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Input formatting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Output.html">Output</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
@@ -102,6 +110,7 @@ data. Should be comma delimited and in all caps.</p>
   <li><a href="index.html">Documentation overview</a><ul>
   <li><a href="manual.html">User Manual</a><ul>
       <li>Previous: <a href="details.html" title="previous chapter">Details of operation</a></li>
+      <li>Next: <a href="Output.html" title="next chapter">Output</a></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -131,7 +140,7 @@ data. Should be comma delimited and in all caps.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018, Aaron Yao-Smith.
+      &copy;2019, Meromit Singer.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>

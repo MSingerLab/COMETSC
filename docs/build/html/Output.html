@@ -13,10 +13,11 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="_static/COMET_favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API reference" href="api.html" />
+    <link rel="prev" title="Input formatting" href="usage.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -35,92 +36,36 @@
             
   <div class="section" id="output">
 <h1>Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h1>
-<p>Following is an example of COMET usage and output on the command line:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ hgmd input/ output/
-Started on 2018-11-01T22:55:15.243954
-Reading data...
-Generating complement data...
-########
-# Processing cluster 1...
-########
-Running t test on singletons...
-Running XL-mHG on singletons...
-Creating discrete expression matrix...
-Finding pair expression matrix...
-Running hypergeometric test on pairs...
-Finding simple true positives/negatives for singletons...
-Finding simple true positives/negatives for pairs...
-Pickling data for later...
-Exporting cluster 1 output to CSV...
-Drawing plots...
-Drawing discrete plots...
-Drawing combined plots...
-Drawing singleton combined plots...
-Drawing true positive/negative plots...
-########
-# Processing cluster 2...
-########
-Running t test on singletons...
-Running XL-mHG on singletons...
-Creating discrete expression matrix...
-Finding pair expression matrix...
-Running hypergeometric test on pairs...
-Finding simple true positives/negatives for singletons...
-Finding simple true positives/negatives for pairs...
-Pickling data for later...
-Exporting cluster 2 output to CSV...
-Drawing plots...
-Drawing discrete plots...
-Drawing combined plots...
-Drawing singleton combined plots...
-Drawing true positive/negative plots...
-########
-# Processing cluster 3...
-########
-Running t test on singletons...
-Running XL-mHG on singletons...
-Creating discrete expression matrix...
-Finding pair expression matrix...
-Running hypergeometric test on pairs...
-Finding simple true positives/negatives for singletons...
-Finding simple true positives/negatives for pairs...
-Pickling data for later...
-Exporting cluster 3 output to CSV...
-Drawing plots...
-Drawing discrete plots...
-Drawing combined plots...
-Drawing singleton combined plots...
-Drawing true positive/negative plots...
-Ended on 2018-11-01T22:56:28.103160
-</pre></div>
-</div>
-<p>Following are examples of COMET output:</p>
-<p><em>CSV  pair output</em>
+<p>Following are examples of COMET output. Descriptions of statistical values can be found in the <a class="reference internal" href="details.html"><span class="doc">details</span></a> section of the manual.</p>
+<p><strong>Data:</strong></p>
+<p><em>CSV  pair output</em> :
 Gives the gene-pairs ordered based on our ranking system of
 statistical relevance. Column ‘rank’ gives the final rank of the pair
 compared to the others. See our discussion in the manual for more info
 on ranking and the various statistics calculated for each pair.
-<img alt="pair_csv" src="_images/pair_csv_example.png" /></p>
-<p><em>Singleton-only CSV output</em>
+<img alt="pair_csv" src="_images/pair_csv.png" /></p>
+<p><em>Singleton-only CSV output</em> :
 Gives the single-gene marker list, ordered based on statistical relevance.
-<img alt="sing_csv" src="_images/singleton_csv_example.png" /></p>
-<p><em>Combined continuous/discrete plots</em>
+<img alt="sing_csv" src="_images/sing_csv.png" /></p>
+<p><strong>Visualizations:</strong></p>
+<p>Shown below is t-sne format, but any two-dimensional visualization method is fine to use as input to COMET.</p>
+<p><em>Combined continuous/discrete plots</em> :
 Gives the discrete and continuous plot for the single genes of the top
 performing pairs.
 <img alt="combined" src="_images/cluster_Spleen_1_combined-01.jpg" /></p>
-<p><em>Discrete plots comparing combinations/singletons</em>
+<p><em>Discrete plots comparing combinations/singletons</em> :
 Discrete only plots that show a pair of genes each. Gives a
 visualization of the discrete dual-expression alongside each single gene’s
 discrete expression.
 <img alt="discrete" src="_images/cluster_Spleen_1_discrete-01.jpg" /></p>
-<p><em>Singleton-only combined plots</em>
+<p><em>Singleton-only combined plots</em> :
 Plots that show the discrete and continuous versio  of the top
 performing single genes.
 <img alt="sing_cmb" src="_images/cluster_Spleen_1_singleton_combined-01.jpg" /></p>
-<p><em>True positive/negative plot</em>
+<p><em>True positive/negative plot</em> :
 True positive/ True negative values for the top gene pairs.
 <img alt="TPTN" src="_images/cluster_Spleen_1_TP_TN-1.jpg" /></p>
-<p><em>Singleton-only TP/TN plot</em>
+<p><em>Singleton-only TP/TN plot</em> :
 true positive / True negatives values for the top single genes.
 <img alt="sing_TPTN" src="_images/cluster_Spleen_1_singleton_TP_TN-1.jpg" /></p>
 <div class="toctree-wrapper compound">
@@ -144,8 +89,16 @@ true positive / True negatives values for the top single genes.
 
 
 <h3>Navigation</h3>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="manual.html">User Manual</a></li>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Installation/Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="manual.html">User Manual</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="background.html">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="details.html">Details of operation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html">Input formatting</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Output</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
 </ul>
 
@@ -153,6 +106,10 @@ true positive / True negatives values for the top single genes.
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="manual.html">User Manual</a><ul>
+      <li>Previous: <a href="usage.html" title="previous chapter">Input formatting</a></li>
+      <li>Next: <a href="api.html" title="next chapter">API reference</a></li>
+  </ul></li>
   </ul></li>
 </ul>
 </div>
@@ -181,7 +138,7 @@ true positive / True negatives values for the top single genes.
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018, Aaron Yao-Smith.
+      &copy;2019, Meromit Singer.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
