@@ -251,7 +251,7 @@ def read_data(cls_path, tsne_path, marker_path, gene_path, D, tenx):
 def process(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_path,pickle_path,cluster_number,K,abbrev,cluster_overall,Trim,count_data):
     #for cls in clusters:
     # To understand the flow of this section, read the print statements.
-    heur_limit = min(50,len(marker_exp.columns))
+    heur_limit = min(50, len(marker_exp.columns))
     start_cls_time = time.time()
     print('########\n# Processing cluster ' + str(cls) + '...\n########')
     print(str(K) + ' gene combinations')
