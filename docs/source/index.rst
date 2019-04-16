@@ -1,6 +1,6 @@
 .. title:: Home
 
-.. _Github: https://github.com/Cnrdelaney/HG_marker_detection
+.. _Github: https://github.com/MSingerLab/COMETSC
 
 .. _website: http://www.cometsc.com/index
 

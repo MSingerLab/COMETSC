@@ -1,4 +1,4 @@
-.. _Github: https://github.com/Cnrdelaney/HG_marker_detection
+.. _Github: https://github.com/MSingerLab/COMETSC
 
 .. _Python: https://www.python.org/downloads/
 
