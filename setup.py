@@ -36,7 +36,7 @@ setup(
         'pytest==3.6.3',
         'python-dateutil==2.7.3',
         'pytz==2018.5',
-        'requests==2.19.1',
+        'requests==2.20.0',
         'scipy==1.1.0',
         'six==1.11.0',
         'traitlets==4.3.2',
