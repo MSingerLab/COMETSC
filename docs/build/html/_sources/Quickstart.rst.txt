@@ -17,7 +17,7 @@ The easiest way to install the package is to simply run in the terminal:
 
 .. code-block:: console
 
-   $ pip install HGMarkerDetection
+   $ pip install COMETSC
 
 This will auto-download the depencencies necessary for running the
 tool. If you prefer to download the source code directly, you can clone the COMET source from our Github_, navigate to the cloned directory, then install it using Python.
@@ -35,8 +35,6 @@ In this example, we have our data located in the current directory. ``output/`` 
 		
    $ hgmd marker_file tsne_file cluster_file output/
 
-   $ hgmd [-h] [-g [G]] [-C [C]] [-X [X]] [-L [L]] [-Abbrev [ABBREV]]
-            [-K [K]]
 After this command is entered, COMET will run in the terminal, processing your data. See :doc:`Examples<examples>` for details on what this should look like.
 
 The optional statements are described as follows:
@@ -49,7 +47,8 @@ The optional statements are described as follows:
 
     Optional gene list. Pointing -g to a text file with a list of
     genes will only run COMET with these genes. By default, it will
-    use our own curated list of surface protein relevant genes.
+    use our own curated list of surface protein relevant genes. Gene
+    lists should be either comma delimited or line delimited.
 
 -C (int)
 
@@ -62,32 +61,66 @@ The optional statements are described as follows:
 -X (int)
 
     X-param of the XL-mHG test. Determines the percentage of ones
-    above the threshold. See the statistical section for more info.
+    above the threshold. See the statistical section for more
+    info. Should only be values between 0 and 1.
 
 -L (int)
 
-    L-param of the XL-mHG test. Determines the lowest threshold to consider. See the statistical section for more info.
+    L-param of the XL-mHG test. Determines the lowest threshold to
+    consider.
+    See the statistical section for more info.
 
--Abbrev (Boolean)
+-Abbrev (list)
 
-    Abbrev is only used when dealing with 3-gene combinations. The
-    full treatment of 3-gene combinations is computationally
-    expensive, so if you are using anything other than a computing
-    cluster this should be set to True (True by default). Allows
-    3-gene combinations to be run on a laptop, but drastically reduces
-    the space.
+    Abbrev is a variable to turn on the heuristics for a given
+    run. After typing '-Abbrev' , give a list of the number geene
+    combinations you would like to be treated with the heuristic. For
+    example, if you want to turn on the heuristic for 3- gene
+    combinations only, input [3]. If you would like them for both 2-
+    and 3- gene combinations, input [2,3].
 
 -K (int)
 
     The number of gene combinations you would like to consider. This
-    defaults to 2, can be at most 3 (for the time being). Should only
-    be either 2 or 3. Will be extended to 4 gene combinations in the
-    future.
+    defaults to 2, can be at most 4 (for the time being). Note that
+    the 4- gene combinations do not have a tested heuristic available.
+
+
+-Down (int)
+
+    For turning on downsampling. Will turn the data set into a random
+    sampling of this many cells. Preserves cluster percentages by
+    taking cells of each cluster at the same rate as the full set.
     
+-Trim (int)
+
+    Integer input for determining the size of the output
+    files. Currently default is set to 2000, but an increase here will
+    give more combinations / singletons in the final ranked output files.
+
+-Count (Boolean)
+
+    For turning on count data graphs. Will graph the log(count+1)
+    instead of simply the count. Leads to nicer continuous expression
+    plots.
+
+-tenx (Boolean)
+
+    For turning on tenx file integration. To submit a 10X format
+    expression matrix, set this variable to True and in place of the
+    expression matrix file in the command, use the folder containing
+    the 10X data. Keep the default 10X names (e.g. barcodes.tsv,
+    genes.tsv,matrix.mtx)
+    
+
     
 Troubleshooting
 ========================    
 
-There has been a known issue with the compatibility of matplotlib with certain installations. A fix that has been successful in most test cases can be found at matplotlib_ , consisting of changing the matplotlibrc 'backend' variable to either 'Agg' or 'TkAgg'.
+There has been a known issue with the compatibility of matplotlib with
+certain installations. A fix that has been successful in most test
+cases can be found at matplotlib_ , consisting of changing the
+matplotlibrc 'backend' variable to either 'Agg' or 'TkAgg'.
+
     
 .. toctree::

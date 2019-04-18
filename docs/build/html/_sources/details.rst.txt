@@ -97,7 +97,7 @@ Once COMET has ranked all gene combinations using the corresponding hypergeometr
 8. Export statistical results.
 ---------------------------------
 
-COMET's statistical results are exported to two CSV files per cluster: one including statistical values for exclusively singletons, and one including all combinations. Rows are genes or gene combinations, columns are values associated with that gene/combination.
+COMET's statistical results are exported to multiple CSV files per cluster: some including statistical values for exclusively singletons, and some including combinations. Rows are genes or gene combinations, columns are values associated with that gene/combination.
 
 The columns of the statistical data are:
 
@@ -121,7 +121,7 @@ The columns of the statistical data are:
 9. Generate and export visualizations.
 -----------------------------------------
 
-For each cluster, COMET generates five - seven PNG file folders containing visualizations of the statistical results. Each folder's name is prefixed by the cluster name, and includes visuals for only the first few highest ranked genes/combinations. The 'rank' stated in the folder is the rank amongst ONLY those which were plotted, therefore it does not necessarily reflect the actual rank from the data.
+For each cluster, COMET generates several PNG file folders containing visualizations of the statistical results. Each folder's name is prefixed by the cluster name, and includes visuals for only the first few highest ranked genes/combinations. The data files are described in the Output section.
 
 The folders are:
 

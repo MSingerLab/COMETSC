@@ -13,15 +13,35 @@ Following are examples of COMET output. Descriptions of statistical values can b
 
 **Data:**
 
-*CSV  pair output* : 
+*singleton_all_ranked* :
+Single gene marker list containing the overall rankings based on the
+xl-mHG p-value and the absolute fold change. Includes genes with True
+Positive value greater than 0.15 and negation genes
+if they have a True Negative value of greater than 0.5  .
+
+*singleton_positive_markers_only_ranked* :
+Single gene marker list as above, except without the negation
+genes. Useful if the focus is on positive markers.
+
+*singleton_full_unranked* :
+ALL single genes, with no rank. Useful for finding genes that did not
+show up in the ranked lists if, for instance, they were expected
+markers and the user would like to see why they have not shown up as
+good markers.
+
+*pair_final_ranking* :
 Gives the gene-pairs ordered based on our ranking system of
-statistical relevance. Column 'rank' gives the final rank of the pair
-compared to the others. See our discussion in the manual for more info
-on ranking and the various statistics calculated for each pair.
+statistical relevance. Does not include all pairs.
+
+*pair_full_unranked* :
+Gives ALL gene-pairs with no ordering and no rankings. Useful for
+looking at pairs that did not show up in the ranked list.
+
+
+*CSV  pair output example* :
 |pair_csv|
 
-*Singleton-only CSV output* : 
-Gives the single-gene marker list, ordered based on statistical relevance.
+*Singleton-only CSV output example* : 
 |sing_csv|                                                                       
 
 

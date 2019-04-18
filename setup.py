@@ -13,7 +13,6 @@ setup(
         'adjustText==0.7.3' ,
         'atomicwrites==1.1.5' ,
         'attrs==18.1.0',
-        'certifi==2018.4.16',
         'chardet==3.0.4',
         'cycler==0.10.0',
         'Cython==0.28.4',
