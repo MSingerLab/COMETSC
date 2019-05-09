@@ -6,7 +6,7 @@ def read(filename):
 
 setup(
     name = 'COMETSC',
-    version = '1.1.2',
+    version = '0.1.1',
     long_description=read('README.md'),
     packages = ['hgmd'],
     install_requires=[

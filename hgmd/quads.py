@@ -13,7 +13,15 @@ FLOAT_PRECISION = 0.001
 
 
 
-def combination_product(discrete_exp,c_list,coi,trips_list):
+def combination_product(discrete_exp,c_list,coi,xlmhg):
+    count = 0
+    trips_list=[]
+    for index,row in xlmhg.iterrows():
+        if count == 50:
+            break
+        else:
+            trips_list.append(row['gene_1'])
+            count = count + 1
 
 
     def quads_matrix_gen(matrix):

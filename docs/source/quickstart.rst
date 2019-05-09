@@ -4,14 +4,19 @@
 
 .. _website: http://www.cometsc.com/index
 
-.. _matplotlib: https://stackoverflow.com/questions/21784641/installation-issue-with-matplotlib-python
+.. _matplotlib:
+https://stackoverflow.com/questions/21784641/installation-issue-with-matplotlib-python
+
+.. _tutorial: https://docs.python.org/3.6/tutorial/venv.html
 
 Installation/Quickstart
 ========================
 
-To skip installation on your own machine and run COMET on your data on COMET's servers, check out our website_!
+To skip installation on your own machine and run COMET on your data through COMET's interface, check out our website_!
 
 To install COMET's Python implementation on your own machine, you should first have Python_ version 3.6 installed.
+
+As with all python usage, it is recommended to use python virtual environments to avoid conflicting package versions. Find out how at python's documentation tutorial_.
 
 The easiest way to install the package is to simply run in the terminal:
 
@@ -111,7 +116,12 @@ The optional statements are described as follows:
     expression matrix file in the command, use the folder containing
     the 10X data. Keep the default 10X names (e.g. barcodes.tsv,
     genes.tsv,matrix.mtx)
-    
+
+-online (Boolean)
+
+    Online version of COMET, turning this on will produce a run as if
+    it were submitted to the interface. This limits the run to looking
+    at the 15 largest clusters.
 
     
 Troubleshooting

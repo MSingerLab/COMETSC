@@ -97,6 +97,8 @@ def batch_xlmhg(marker_exp, c_list, coi, X=None, L=None):
     #Set X and L params
     if X is None:
         X = np.int(.15*count_n)
+    else:
+        X = np.int(X*count_n)
     if L is None:
         if 2*count_n >= marker_exp.shape[0]:
             L = np.int(marker_exp.shape[0])
@@ -727,33 +729,41 @@ def combination_product(discrete_exp,c_list,coi,abbrev,heur_limit):
         trips_in_cls_product = trips_matrix_gen(in_cls_matrix)
         trips_total_product = trips_matrix_gen(total_matrix)
 
-
     #make a row-wise gene_map scheme
     gene_map = discrete_exp.columns.values
-    
     gene_1_mapped = []
     count = 0
+    count_2 = 0
     for gene in gene_map:
+        if '3' in abbrev and count_2 >= total_pairs+1:
+            break
         for x in range(gene_count-1-count):
             for n in range(gene_count):
                 gene_1_mapped.append(gene)
+                count_2 = count_2 + 1
         count = count + 1
     gene_1_mapped = pd.Index(gene_1_mapped)
     if '3' in abbrev:
         gene_1_mapped = gene_1_mapped[:total_pairs]
-
+    count_2 = 0
     gene_3_mapped = []
     val = int(len(gene_1_mapped)/gene_count)
     for x in range(val):
+        if '3' in abbrev and count_2 >= total_pairs+1:
+            break
         count = 0
         for gene in gene_map:
             gene_3_mapped.append(gene_map[count])
+            count_2 = count_2 + 1
             count = count + 1
     gene_3_mapped = pd.Index(gene_3_mapped)
     if '3' in abbrev:
         gene_3_mapped = gene_3_mapped[:total_pairs]
+    count_2 = 0
     gene_2_mapped = []
     for x in range(gene_count-1):
+        if '3' in abbrev and count_2 >= total_pairs+1:
+            break
         count = 0
         for gene in gene_map:
             if count == 0:
@@ -761,6 +771,7 @@ def combination_product(discrete_exp,c_list,coi,abbrev,heur_limit):
                 continue
             for n in range(gene_count):
                 gene_2_mapped.append(gene_map[count])
+                count_2 = count_2 + 1
             count = count + 1
         gene_map = np.delete(gene_map,0)
     gene_2_mapped = pd.Index(gene_2_mapped)
@@ -771,17 +782,25 @@ def combination_product(discrete_exp,c_list,coi,abbrev,heur_limit):
     row_count = int((gene_count*(gene_count-1))/2)
     
     #column coordinate
+    count_2 = 0
     list_one_ = []
     for numm in range(row_count):
+        if '3' in abbrev and count_2 >= total_pairs+1:
+            break
         for num in range(gene_count):
             list_one_.append(num)
+            count_2 = count_2 + 1
     list_one = np.array(list_one_)
     
     #row coordinate
+    count_2 = 0
     list_two_ = []
     for num in range(row_count):
+        if '3' in abbrev and count_2 >= total_pairs+1:
+            break
         for numm in range(gene_count):
             list_two_.append(num)
+            count_2 = count_2 + 1
     list_two = np.array(list_two_)
     
     fourth = time.time()

@@ -152,10 +152,12 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="installation-quickstart">
+  <p><a class="reference external" href="https://stackoverflow.com/questions/21784641/installation-issue-with-matplotlib-python">https://stackoverflow.com/questions/21784641/installation-issue-with-matplotlib-python</a></p>
+<div class="section" id="installation-quickstart">
 <h1>Installation/Quickstart<a class="headerlink" href="#installation-quickstart" title="Permalink to this headline">¶</a></h1>
-<p>To skip installation on your own machine and run COMET on your data on COMET’s servers, check out our <a class="reference external" href="http://www.cometsc.com/index">website</a>!</p>
+<p>To skip installation on your own machine and run COMET on your data through COMET’s interface, check out our <a class="reference external" href="http://www.cometsc.com/index">website</a>!</p>
 <p>To install COMET’s Python implementation on your own machine, you should first have <a class="reference external" href="https://www.python.org/downloads/">Python</a> version 3.6 installed.</p>
+<p>As with all python usage, it is recommended to use python virtual environments to avoid conflicting package versions. Find out how at python’s documentation <a class="reference external" href="https://docs.python.org/3.6/tutorial/venv.html">tutorial</a>.</p>
 <p>The easiest way to install the package is to simply run in the terminal:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install COMETSC
 </pre></div>
@@ -232,12 +234,17 @@ expression matrix, set this variable to True and in place of the
 expression matrix file in the command, use the folder containing
 the 10X data. Keep the default 10X names (e.g. barcodes.tsv,
 genes.tsv,matrix.mtx)</div></blockquote>
+<p>-online (Boolean)</p>
+<blockquote>
+<div>Online version of COMET, turning this on will produce a run as if
+it were submitted to the interface. This limits the run to looking
+at the 15 largest clusters.</div></blockquote>
 </div>
 <div class="section" id="troubleshooting">
 <h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h1>
 <p>There has been a known issue with the compatibility of matplotlib with
 certain installations. A fix that has been successful in most test
-cases can be found at <a class="reference external" href="https://stackoverflow.com/questions/21784641/installation-issue-with-matplotlib-python">matplotlib</a> , consisting of changing the
+cases can be found at <a class="reference internal" href="#matplotlib">matplotlib</a> , consisting of changing the
 matplotlibrc ‘backend’ variable to either ‘Agg’ or ‘TkAgg’.</p>
 <div class="toctree-wrapper compound">
 </div>

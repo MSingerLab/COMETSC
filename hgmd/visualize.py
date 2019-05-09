@@ -72,7 +72,6 @@ def make_plots(
     else:
         q_short=quads_fin.iloc[:plot_pages]
     vmt = np.vectorize(make_title,excluded=[6,7])
-
     d_plot_genes = zip(
         zip(
             vmt(
@@ -149,27 +148,36 @@ def make_plots(
 
     
     print("Drawing discrete plots for pairs...")
-    
-    make_discrete_plots(
-        tsne, discrete_exp, d_plot_genes, discrete_path, 2
-    )
-    
+    try:
+        make_discrete_plots(
+            tsne, discrete_exp, d_plot_genes, discrete_path, 2
+        )
+    except Exception as err:
+        print('No plots generated')
+        print(err)
     if type(trips) == int:
         pass
     else:
         print("Drawing discrete plots for trips...")
-        make_discrete_plots(
-            tsne, discrete_exp, t_plot_genes, trips_path, 3
-            )
+        try:
+            make_discrete_plots(
+                tsne, discrete_exp, t_plot_genes, trips_path, 3
+                )
+        except Exception as err:
+            print('no plots generated')
+            print(err)
     
     if type(quads_fin) == int:
         pass
     else:
         print("Drawing discrete plots for quads...")
-        make_discrete_plots(
-            tsne, discrete_exp, q_plot_genes, quads_path, 4
-            )
-    
+        try:
+            make_discrete_plots(
+                tsne, discrete_exp, q_plot_genes, quads_path, 4
+                )
+        except Exception as err:
+            print('no plots generated')
+            print(err)
     c_plot_genes = zip(
         zip(
             vmt(
@@ -188,11 +196,13 @@ def make_plots(
         ), p_short['gene_1'].values, p_short['gene_2'].values
     )
     print("Drawing combined plots...")
-    
-    make_combined_plots(
-        tsne, discrete_exp, marker_exp, c_plot_genes, combined_path
-    )
-    
+    try:
+        make_combined_plots(
+            tsne, discrete_exp, marker_exp, c_plot_genes, combined_path
+            )
+    except Exception as err:
+        print('no plots generated')
+        print(err)
     c_s_plot_genes = zip(
         zip(
             vmt(
@@ -203,23 +213,28 @@ def make_plots(
         ), s_short.index, repeat(np.nan)
     )
     print("Drawing singleton combined plots...")
-    
-    make_combined_plots(
-        tsne, discrete_exp, marker_exp, c_s_plot_genes, sing_combined_path
-    )
-    
+    try:
+        make_combined_plots(
+            tsne, discrete_exp, marker_exp, c_s_plot_genes, sing_combined_path
+            )
+    except Exception as err:
+        print('no plots generated')
+        print(err)
     pair_tp_tn = pair[['gene_1', 'gene_2', 'TP', 'TN']]
     sing_tp_tn = sing[['TP', 'TN']]
     print("Drawing true positive/negative plots...")
-    make_tp_tn_plot(
-        zip(p_short['gene_1'], p_short['gene_2']),
-        sing_tp_tn, pair_tp_tn, tptn_path, 0
-    )
-    make_tp_tn_plot(
-        zip(s_short.index, repeat(np.nan)),
-        sing_tp_tn, pair_tp_tn, sing_tptn_path, 1
-    )
-
+    try:
+        make_tp_tn_plot(
+            zip(p_short['gene_1'], p_short['gene_2']),
+            sing_tp_tn, pair_tp_tn, tptn_path, 0
+            )
+        make_tp_tn_plot(
+            zip(s_short.index, repeat(np.nan)),
+            sing_tp_tn, pair_tp_tn, sing_tptn_path, 1
+            )
+    except Exception as err:
+        print('no plots generated')
+        print(err)
 
 def make_title(gene_1, gene_2, rank, cutoff_val, TP, TN, sing_tp_tn,xlmhg):
     """Makes a plot title for a gene or gene pair.
@@ -280,7 +295,7 @@ def make_plot(ax, title, coords, cmap, draw_cbar=False):
         x=coords[0],
         y=coords[1],
         c=abs(coords[2]),
-        s=2,
+        s=4,
         cmap=cmap
     )
     if draw_cbar:
@@ -458,7 +473,22 @@ def make_discrete_plots(tsne, discrete_exp, plot_genes, path,num):
                     )
                 
             #pdf.savefig(fig)
-        plt.savefig( path + '/' + 'rank_' + str(count) + '.png')
+        if len(plot_gene) >= 4:
+            plt.savefig( path + '/' + 'rank_' + str(count) + '.png')
+        else:
+            try:
+                if ':' in str(plot_gene[0][0][:9]):
+                    if ':' in str(plot_gene[0][0][:8]):
+                        if ':' in str(plot_gene[0][0][:7]):
+                            plt.savefig( path + '/' + str(plot_gene[0][0][:6]) + '.png')
+                        else:
+                            plt.savefig( path + '/' + str(plot_gene[0][0][:7]) + '.png')
+                    else:
+                        plt.savefig( path + '/' + str(plot_gene[0][0][:8]) + '.png')
+                else:
+                    plt.savefig( path + '/' + str(plot_gene[0][0][:9]) + '.png')
+            except:
+                plt.savefig( path + '/' + 'rank_' + str(count) + '.png')
         count=count+1
         plt.close(fig)
 

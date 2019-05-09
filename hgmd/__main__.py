@@ -78,10 +78,14 @@ def init_parser(parser):
         '-tenx', nargs='?',default=False,
         help="Set to True when count data is being used, for visualizations."
     )
+    parser.add_argument(
+        '-online', nargs='?',default=False,
+        help="Set to True for online version."
+    )
     return parser
 
 
-def read_data(cls_path, tsne_path, marker_path, gene_path, D, tenx):
+def read_data(cls_path, tsne_path, marker_path, gene_path, D, tenx, online):
     """
     Reads in cluster series, tsne data, marker expression without complements
     at given paths.
@@ -94,8 +98,6 @@ def read_data(cls_path, tsne_path, marker_path, gene_path, D, tenx):
     tsne = pd.read_csv(
         tsne_path, sep='\t', index_col=0, names=['cell', 'tSNE_1', 'tSNE_2']
     )
-    #could be optimized to read and check against gene list simultaneously
-    #if this is being a bottleneck. Would require unboxing pd.read_csv though.
     start_= time.time()
     tenx = int(tenx)
     if tenx == 1:
@@ -251,7 +253,7 @@ def read_data(cls_path, tsne_path, marker_path, gene_path, D, tenx):
 def process(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_path,pickle_path,cluster_number,K,abbrev,cluster_overall,Trim,count_data):
     #for cls in clusters:
     # To understand the flow of this section, read the print statements.
-    heur_limit = min(50, len(marker_exp.columns))
+    heur_limit = min(50,len(marker_exp.columns))
     start_cls_time = time.time()
     print('########\n# Processing cluster ' + str(cls) + '...\n########')
     print(str(K) + ' gene combinations')
@@ -260,29 +262,52 @@ def process(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_pa
     else:
         print('Heuristic limit set to: ' + str(heur_limit))
     print('Running t test on singletons...')
-    t_test = hgmd.batch_stats(marker_exp, cls_ser, cls)
+    try:
+        t_test = hgmd.batch_stats(marker_exp, cls_ser, cls)
+    except Exception as err:
+        print('t-test error')
+        print(err)
     print('Calculating fold change')
-    fc_test = hgmd.batch_fold_change(marker_exp, cls_ser, cls)
+    try:
+        fc_test = hgmd.batch_fold_change(marker_exp, cls_ser, cls)
+    except Exception as err:
+        print('fold-change error')
+        print(err)
     print('Running XL-mHG on singletons...')
-    xlmhg = hgmd.batch_xlmhg(marker_exp, cls_ser, cls, X=X, L=L)
-    q_val = hgmd.batch_q(xlmhg)
+    try:
+        xlmhg = hgmd.batch_xlmhg(marker_exp, cls_ser, cls, X=X, L=L)
+    except Exception as err:
+        print('XLMHG error')
+        print(err)
+    try:
+        q_val = hgmd.batch_q(xlmhg)
+    except Exception as err:
+        print('q-val error')
+        print(err)
     # We need to slide the cutoff indices before using them,
     # to be sure they can be used in the real world. See hgmd.mhg_slide()
-    cutoff_value = hgmd.mhg_cutoff_value(
-        marker_exp, xlmhg[['gene_1', 'mHG_cutoff']]
-    )
-    xlmhg = xlmhg[['gene_1', 'mHG_stat', 'mHG_pval']].merge(
-        hgmd.mhg_slide(marker_exp, cutoff_value), on='gene_1'
-    )
-    # Update cutoff_value after sliding
-    cutoff_value = pd.Series(
-        xlmhg['cutoff_val'].values, index=xlmhg['gene_1']
-    )
-    xlmhg = xlmhg\
-        .sort_values(by='mHG_stat', ascending=True)
-        
+    try:
+        cutoff_value = hgmd.mhg_cutoff_value(
+            marker_exp, xlmhg[['gene_1', 'mHG_cutoff']]
+            )
+        xlmhg = xlmhg[['gene_1', 'mHG_stat', 'mHG_pval']].merge(
+            hgmd.mhg_slide(marker_exp, cutoff_value), on='gene_1'
+            )
+        # Update cutoff_value after sliding
+        cutoff_value = pd.Series(
+            xlmhg['cutoff_val'].values, index=xlmhg['gene_1']
+            )
+        xlmhg = xlmhg\
+          .sort_values(by='mHG_stat', ascending=True)
+    except Exception as err:
+        print('error in sliding values')
+        print(err)
     print('Creating discrete expression matrix...')
-    discrete_exp = hgmd.discrete_exp(marker_exp, cutoff_value, abbrev, xlmhg)
+    try:
+        discrete_exp = hgmd.discrete_exp(marker_exp, cutoff_value, abbrev, xlmhg)
+    except Exception as err:
+        print('discrete matrix construction failed')
+        print(err)
     '''
     #For checking the sliding issue
     count = 0
@@ -312,7 +337,7 @@ def process(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_pa
             discrete_exp.drop(labels=gene,axis=1,inplace=True)
     ########################################################################################
     ###########
-    #ABBREVIATED
+    #OLD HEURISTICS
     #abb = '3'
     #if abb in abbrev:
     #    print('Heuristic Abbreviation initiated for ' + str(abbrev) )
@@ -340,7 +365,7 @@ def process(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_pa
         print('')
         print('Starting quads')
         print('')
-        quads_in_cls, quads_total, quads_indices, odd_gene_mapped, even_gene_mapped = quads.combination_product(discrete_exp,cls_ser,cls,trips_list)
+        quads_in_cls, quads_total, quads_indices, odd_gene_mapped, even_gene_mapped = quads.combination_product(discrete_exp,cls_ser,cls,xlmhg)
         print('')
         print('')
         print('')
@@ -351,7 +376,11 @@ def process(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_pa
     if K == 3:
         start_trips = time.time()
         print('Finding Trips expression matrix...')
-        trips_in_cls,trips_total,trips_indices,gene_1_mapped,gene_2_mapped,gene_3_mapped = hgmd.combination_product(discrete_exp,cls_ser,cls,abbrev,heur_limit)
+        try:
+            trips_in_cls,trips_total,trips_indices,gene_1_mapped,gene_2_mapped,gene_3_mapped = hgmd.combination_product(discrete_exp,cls_ser,cls,abbrev,heur_limit)
+        except Exception as err:
+            print('error in 3-gene matrix construction')
+            print(err)
         end_trips = time.time()
         print(str(end_trips-start_trips) + ' seconds')
 
@@ -430,14 +459,17 @@ def process(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_pa
     pair_tp_tn.to_pickle(pickle_path + 'pair_tp_tn_' + str(cls))
     #trips_tp_tn.to_pickle(pickle_path + 'trips_tp_tn' + str(cls))
     print('Exporting cluster ' + str(cls) + ' output to CSV...')
-    sing_output = xlmhg\
-        .merge(t_test, on='gene_1')\
-        .merge(fc_test, on='gene_1')\
-        .merge(sing_tp_tn, on='gene_1')\
-        .merge(q_val, on='gene_1')\
-        .set_index('gene_1')\
-        .sort_values(by='mHG_stat', ascending=True)
-    
+    try:
+        sing_output = xlmhg\
+          .merge(t_test, on='gene_1')\
+          .merge(fc_test, on='gene_1')\
+          .merge(sing_tp_tn, on='gene_1')\
+          .merge(q_val, on='gene_1')\
+          .set_index('gene_1')\
+          .sort_values(by='mHG_stat', ascending=True)
+    except Exception as err:
+        print(err)
+        sing_output = xlmhg.sort_values(by='mHG_stat',ascending=True)
     sing_output.sort_values(by='gene_1',ascending=True).to_csv(
         csv_path + '/cluster_' + str(cls) + '_singleton_full_unranked.csv'
     )
@@ -505,8 +537,8 @@ def process(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_pa
     #Add trips data pages
     #does not currently do new rank scheme
     if K == 3:
-        trips_output = trips\
-          .sort_values(by='HG_stat', ascending=True)
+        trips_output = trips
+        #  .sort_values(by='HG_stat', ascending=True)
           #print(trips_output)
         trips_output['rank'] = trips_output.reset_index().index + 1
         trips_print = trips_output.head(Trim)
@@ -594,7 +626,7 @@ def main():
     Trim = args.Trim
     count_data = args.Count
     tenx = args.tenx
-
+    online = args.online
     
     plot_pages = 30  # number of genes to plot (starting with highest ranked)
 
@@ -633,7 +665,16 @@ def main():
     else:
         C = 1
     if X is not None:
-        X = int(X)
+        try:
+            X = float(X)
+        except:
+            raise Exception('X param must be a number between 0 and 1')
+        if X > 1:
+            X = int(1)
+        elif X <= 0:
+            X = int(0)
+        else:
+            X = float(X)
         print("Set X to " + str(X) + ".")
     if L is not None:
         L = int(L)
@@ -653,14 +694,27 @@ def main():
             count_data = 1
             print('Count Data')
         else:
-            pass
+            count_data = int(0)
+    else:
+        count_data = int(0)
     if tenx is not None:
         if tenx == str(True):
             tenx = int(1)
         elif tenx == 'yes':
             tenx = int(1)
         else:
-            pass
+            tenx = int(0)
+    else:
+        tenx = int(0)
+    if online is not None:
+        if online == str(True):
+            online = int(1)
+        elif online == 'yes':
+            online = int(1)
+        else:
+            online = int(0)
+    else:
+        online = int(0)
     print("Reading data...")
     if gene_file is None:
         (cls_ser, tsne, no_complement_marker_exp, gene_path) = read_data(
@@ -669,7 +723,8 @@ def main():
             marker_path=marker_file,
             gene_path=None,
             D=Down,
-            tenx=tenx
+            tenx=tenx,
+            online=online
         )
     else:
         (cls_ser, tsne, no_complement_marker_exp, gene_path) = read_data(
@@ -678,7 +733,8 @@ def main():
             marker_path=marker_file,
             gene_path=gene_file,
             D=Down,
-            tenx=tenx
+            tenx=tenx,
+            online=online
         )
     print("Generating complement data...")
     marker_exp = hgmd.add_complements(no_complement_marker_exp)
@@ -692,8 +748,6 @@ def main():
         #print(marker_exp[index])
     #throw out gene rows that are duplicates and print out a message to user
     
-
-
             
     '''
     #throw out cls_ser vals not in marker_exp
@@ -706,12 +760,38 @@ def main():
     marker_exp.sort_values(by='cell',inplace=True)
     cls_ser.sort_index(inplace=True)
 
-    
     # Process clusters sequentially
     clusters = cls_ser.unique()
     clusters.sort()
     cluster_overall=clusters.copy()
 
+    #Only takes a certain number of clusters (cuts out smallest ones)
+    if online == 1:
+        max_clus_size = 15
+        if len(clusters) <= max_clus_size:
+            pass
+        else:
+            cls_helper = list(clusters.copy())
+            cls_size_count = {}
+            for item in cls_ser:
+                if item in cls_size_count:
+                    cls_size_count[item] = cls_size_count[item] + 1
+                else:
+                    cls_size_count[item] = 1
+            for counted in cls_size_count:
+                cls_size_count[counted] = cls_size_count[counted] / len(cls_ser)
+            while len(cls_helper) > max_clus_size:
+                lowest = 1
+                place = 0
+                for key in cls_size_count:
+                    if cls_size_count[key] < lowest:
+                        place = key
+                        lowest = cls_size_count[key]
+                cls_helper.remove(place)
+                del cls_size_count[place]
+            clusters = np.array(cls_helper)
+
+            
     #Below could probably be optimized a little (new_clust not necessary),
     #cores is number of simultaneous threads you want to run, can be set at will
     cores = C

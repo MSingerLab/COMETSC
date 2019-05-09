@@ -29,6 +29,7 @@ There are three components:
 
 In order to test 'complement' genes (i.e. expressed as the absence of a gene rather than the presence of a gene), COMET creates a new complement gene for each gene. These complement genes are treated exactly the same as normal genes, but their expression values are the negative of the expression values of their analogous gene. This allows COMET to find separate mHG cutoff values for genes and their complements.
 
+
 2. Run XL-mHG tests on singletons.
 ------------------------------------------
 
