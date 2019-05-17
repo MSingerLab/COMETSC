@@ -1,3 +1,6 @@
+##Copyright (c) 2012, Nicolo Fusi, University of Sheffield
+##All rights reserved.
+
 import scipy as sp
 from scipy import interpolate
 
