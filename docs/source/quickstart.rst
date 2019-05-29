@@ -79,23 +79,23 @@ clone the COMET source from our Github_, navigate to the cloned
 directory, then install it using Python.
 
 Now, run COMET on your data. Give the files of your data as the first
-three arguments and your desired output directory as your second argument.
+three arguments and your desired output directory as your second
+argument. Your data must be formatted into three files in your current
+directory.
+See the :doc:`Manual<usage>` for more information.
 
-Your data must be formatted into three files in your input directory: 'markers.txt', 'cluster.txt', and 'vis.txt'. See the :doc:`Manual<usage>` for more information.
-
-In this example, we have our data located in the current directory. ``output/`` is the directory where COMET's output will be stored. 
-
-
+In this example, we have our data located in the current
+directory. ``output/`` is the directory where COMET's output will be
+stored. To test your installation, you can download the following example inputs :download:`here <_static/example_ins.zip>` !
 
 .. code-block:: console
 		
-   $ Comet marker_file vis_file cluster_file output/
+   $ Comet tabmarker.txt tabtsne.txt tabcluster.txt output/
 
 After this command is entered, COMET will run in the terminal,
 processing your data. See some :doc:`examples<Output>` for details on
 what this should look like.
 
-Download some example inputs :download:`here <_static/example_ins.zip>` !
 
 The optional statements are described as follows:
 
@@ -187,5 +187,10 @@ certain installations. A fix that has been successful in most test
 cases can be found at matplotlib_ , consisting of changing the
 matplotlibrc 'backend' variable to either 'Agg' or 'TkAgg'.
 
+
+The most common error when running COMET is the formatting of the
+input files. If a run is failing and you cannot figure out why, please
+consult the :doc:`Manual<usage>` to make sure the inputs are
+absolutely correct.
     
 .. toctree::
