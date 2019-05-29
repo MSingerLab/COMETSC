@@ -1,0 +1,10 @@
+CellA	1
+CellB	1
+CellC	1
+CellD	1
+CellE	2
+CellF	2
+CellG	2
+CellH	2
+CellI	2
+CellJ	2

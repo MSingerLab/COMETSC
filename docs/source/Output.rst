@@ -13,8 +13,15 @@ Following are examples of COMET output. Descriptions of statistical
 values can be found in the :doc:`details<details>` section of the
 manual.
 
-**Comet outputs two folders, one with ranked marker panel lists and
-one with helpful visualizations for the top ranked marker panels.**
+Comet outputs two folders, one with ranked marker panel lists and
+one with helpful visualizations for the top ranked marker panels. The
+data folder contains all of the ranked marker panel lists (see below)
+ordered by the cluster of interest which is stated in the file
+name. The vis folder contains folders for each cluster (see below) as
+well as the TP/TN plos for each cluster (see below). Each sub-folder
+in vis contains png files of different helpful visualizations of the
+data. The metadata file and pickles folder are for future developments
+and are currently not utilized.
 
 For each cluster the following output files will be generated:
 

@@ -1,6 +1,6 @@
 .. _Github: https://github.com/MSingerLab/COMETSC
 
-.. _Python: https://www.python.org/downloads/
+.. _Python: https://www.python.org/downloads/release/python-362/
 
 .. _website: http://www.cometsc.com/index
 
@@ -13,18 +13,46 @@ Installation/Quickstart
 
 To skip installation on your own machine and run COMET on your data through COMET's interface, check out our website_!
 
-To install COMET's Python implementation on your own machine, you should first have Python_ version 3.6 installed.
+To install COMET's Python implementation on your own machine, you
+should have Python_ version 3.6 downloaded & installed. If you do not, you will not
+be able to set up the proper environment. 
 
-As with all python usage, it is recommended to use python virtual environments to avoid conflicting package versions. Find out how at python's documentation tutorial_.
+As with all python usage, it is recommended to use python virtual
+environments to avoid conflicting package versions. The following
+commands can be used to set up the virtual environment assuming there
+are no active environments running on the computer.
 
-The easiest way to install the package is to simply run in the terminal:
+.. code-block:: console
+	$pip install virtualenv
+	$virtualenv new_dir --python=python3.6
+	$source new_dir/bin/activate
+	$pip install COMETSC
+	$Comet markers.txt tsne.txt cluster.txt output/
+	$deactivate
+
+The first line will install the virtual environment software to your
+computer (assuming you already have pip installed). The second line
+then sets up a new virtual environment directory of your choice with
+the proper version of python. The following line is then used to
+activate the environment, but be sure that the path is correct in
+relation to the current working directory. Once that is set up,
+installation using pip is straightforward and you can run the tool
+using your data! When you are finished using the virtual environment,
+simply type 'deactivate' and you will return to your usual python.
+	
+The easiest way to install the package without the use of virtual
+environments is to simply run in the terminal:
 
 .. code-block:: console
 
    $ pip install COMETSC
 
 This will auto-download the depencencies necessary for running the
-tool. If you prefer to download the source code directly, you can clone the COMET source from our Github_, navigate to the cloned directory, then install it using Python.
+tool. If you prefer to download the source code directly, you can
+clone the COMET source from our Github_, navigate to the cloned
+directory, then install it using Python. If you are having issues
+setting up the virtual environment, have a look at the documentation
+at python's tutorial_ .
 
 Now, run COMET on your data. Give the files of your data as the first
 three arguments and your desired output directory as your second argument.
@@ -40,7 +68,10 @@ In this example, we have our data located in the current directory. ``output/`` 
    $ Comet marker_file vis_file cluster_file output/
 
 After this command is entered, COMET will run in the terminal,
-processing your data. See some :doc:`examples<Output>` for details on what this should look like.
+processing your data. See some :doc:`examples<Output>` for details on
+what this should look like.
+
+Download some example inputs :download:`here <_static/example_ins.zip>` !
 
 The optional statements are described as follows:
 

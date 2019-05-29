@@ -1,0 +1,4 @@
+	CellA	CellB	CellC	CellD	CellE	CellF	CellG	CellH	CellI	CellJ
+AAMP	0	1.1	0	0	0	0	0	0	0.5	0
+ACE	0	0	0	0.3	0	0	0	0.4	0	0
+ADA	0	0	0	0	0	0.7	0	0	0	0
