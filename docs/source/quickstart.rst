@@ -22,47 +22,46 @@ environments to avoid conflicting package versions. The following
 commands can be used to set up the virtual environment assuming there
 are no active environments running on the computer.
 
+The first line will install the virtual environment software to your
+computer (assuming you already have pip installed).
+
 .. code-block:: console
 
    $ pip install virtualenv
 
-The first line will install the virtual environment software to your
-computer (assuming you already have pip installed).
-
+The second line then sets up a new virtual environment directory of your choice with
+the proper version of python
 
 .. code-block:: console
 
    $ virtualenv new_dir --python=python3.6
 
-The second line then sets up a new virtual environment directory of your choice with
-the proper version of python
-
-
+The following line will activate the virtual environment, just be sure that the
+path used is the correct one with respect to the current working directory.
+   
  .. code-block:: console
 
    $ source new_dir/bin/activate
 
-This line will activate the virtual environment, just be sure that the
-path used is the correct one with respect to the current working directory.
+Now, install the proper COMET version to the virtual environment.
 
 .. code-block:: console
  
    $ pip install COMETSC
 
-This will install the proper COMET version to the virtual environment.
-
+Now run COMET on your data!  For example:
+   
 .. code-block:: console
 
    $ Comet markers.txt tsne.txt cluster.txt output/
 
-Now run COMET on your data!
-
+When you are finished using the virtual environment,
+simply type 'deactivate' and you will return to your usual python.
+   
 .. code-block:: console
 
    $ deactivate
 
-When you are finished using the virtual environment,
-simply type 'deactivate' and you will return to your usual python.
 	
 The easiest way to install the package without the use of virtual
 environments is to simply run in the terminal:
