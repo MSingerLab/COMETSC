@@ -56,10 +56,10 @@ For each cluster the following output files will be generated:
   Four gene marker panels ranked (if enabled).
 
 
-* ``CSV  pair output example`` :
+``CSV  pair output example`` :
 |pair_csv|
 
-* ``Singleton-only CSV output example`` : 
+``Singleton-only CSV output example`` : 
 |sing_csv|                                                                       
 
 
