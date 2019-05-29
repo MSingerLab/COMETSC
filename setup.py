@@ -6,9 +6,9 @@ def read(filename):
 
 setup(
     name = 'COMETSC',
-    version = '0.1.1',
+    version = '0.1.3',
     long_description=read('README.md'),
-    packages = ['hgmd'],
+    packages = ['Comet'],
     install_requires=[
         'adjustText==0.7.3' ,
         'atomicwrites==1.1.5' ,
@@ -42,9 +42,10 @@ setup(
         'traitlets==4.3.2',
         'urllib3==1.23',
         'xlmhg==2.4.9' ],
+    include_package_data=True,
     entry_points = {
         'console_scripts': [
-            'hgmd = hgmd.__main__:main'
+            'Comet = Comet.__main__:main'
             ]
         }
     

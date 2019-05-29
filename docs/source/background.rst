@@ -12,6 +12,6 @@ Traditional methods of extracting 'marker' proteins from a single-cell RNA seque
 
 COMET uses the hypergeometric statistical test to overcome these limitations. The hypergeometric test considers discrete expression/non-expression instead of a continuous expression scale, allowing us to test gene sets by considering expression/non-expression of the entire set. Combining genes using a continuous expression scale and t-tests is possible: for example, by simply using the n 'best' marker genes. This, however, is ineffective: combinations of genes do not necessarily mark the same cells as their components.
 
-Additionally, COMET uses Florian Wagner's `implementation <https://github.com/flo-compbio/xlmhg>`_ of the 'mHG' statistical test, which in this context finds the most statisticall significant cutoff between expression/non-expression, given our continuous gene expression values.
+Additionally, COMET uses Florian Wagner's `implementation <https://github.com/flo-compbio/xlmhg>`_ of the 'mHG' statistical test, which in this context finds the most statistically significant cutoff between expression/non-expression, given our continuous gene expression values.
 
 .. toctree::

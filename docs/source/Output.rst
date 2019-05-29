@@ -4,78 +4,91 @@
 .. |discrete| image:: _static/cluster_Spleen_1_discrete-01.jpg
 .. |sing_cmb| image:: _static/cluster_Spleen_1_singleton_combined-01.jpg
 .. |sing_TPTN| image:: _static/cluster_Spleen_1_singleton_TP_TN-1.jpg
-.. |TPTN| image:: _static/cluster_Spleen_1_TP_TN-1.jpg
+.. |TPTN| image:: _static/pairtptn.png
 
 Output
 ==========
 
-Following are examples of COMET output. Descriptions of statistical values can be found in the :doc:`details<details>` section of the manual.
+Following are examples of COMET output. Descriptions of statistical
+values can be found in the :doc:`details<details>` section of the
+manual.
 
-**Data:**
+**Comet outputs two folders, one with ranked marker panel lists and
+one with helpful visualizations for the top ranked marker panels.**
 
-*singleton_all_ranked* :
+For each cluster the following output files will be generated:
+
+**Candidate marker panel output files:**
+
+* ``singleton_all_ranked`` :
 Single gene marker list containing the overall rankings based on the
 xl-mHG p-value and the absolute fold change. Includes genes with True
 Positive value greater than 0.15 and negation genes
 if they have a True Negative value of greater than 0.5  .
 
-*singleton_positive_markers_only_ranked* :
+* ``singleton_positive_markers_ranked``:
 Single gene marker list as above, except without the negation
 genes. Useful if the focus is on positive markers.
 
-*singleton_full_unranked* :
+* ``singleton_full_unranked`` :
 ALL single genes, with no rank. Useful for finding genes that did not
-show up in the ranked lists if, for instance, they were expected
-markers and the user would like to see why they have not shown up as
-good markers.
+pass the thresholds in singleton_all_ranked
 
-*pair_final_ranking* :
+* ``pair_final_ranking`` :
 Gives the gene-pairs ordered based on our ranking system of
 statistical relevance. Does not include all pairs.
 
-*pair_full_unranked* :
+* ``pair_full_unranked`` :
 Gives ALL gene-pairs with no ordering and no rankings. Useful for
 looking at pairs that did not show up in the ranked list.
 
+* ``_trips`` :
+Three gene marker panels ranked (if enabled).
 
-*CSV  pair output example* :
+* ``_quads`` :
+Four gene marker panels ranked (if enabled).
+
+
+* ``CSV  pair output example`` :
 |pair_csv|
 
-*Singleton-only CSV output example* : 
+* ``Singleton-only CSV output example`` : 
 |sing_csv|                                                                       
 
 
-**Visualizations:**
+**Visualization Directories:**
 
 Shown below is t-sne format, but any two-dimensional visualization method is fine to use as input to COMET.
 
 
 
-*Combined continuous/discrete plots* : 
+* ``Combined continuous/discrete plots``: 
 Gives the discrete and continuous plot for the single genes of the top
 performing pairs.
 |combined| 
 
-*Discrete plots comparing combinations/singletons* : 
+* ``Discrete plots comparing combinations/singletons`` : 
 Discrete only plots that show a pair of genes each. Gives a
 visualization of the discrete dual-expression alongside each single gene's
 discrete expression.
 |discrete|
 
-*Singleton-only combined plots* : 
+* ``Singleton-only combined plots`` : 
 Plots that show the discrete and continuous versio  of the top
 performing single genes.
 |sing_cmb| 
 
-*True positive/negative plot* : 
+* ``True positive/negative plot`` : 
 True positive/ True negative values for the top gene pairs.
 |TPTN| 
 
-*Singleton-only TP/TN plot* : 
+* ``Singleton-only TP/TN plot`` : 
 true positive / True negatives values for the top single genes.
 |sing_TPTN| 
 
 
+Results shown here are using the Mouse Cell Atlas database (Han
+et. al. 2018)
 
-    
+
 .. toctree::

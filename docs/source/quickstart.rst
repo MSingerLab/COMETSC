@@ -4,10 +4,9 @@
 
 .. _website: http://www.cometsc.com/index
 
-.. _matplotlib:
-https://stackoverflow.com/questions/21784641/installation-issue-with-matplotlib-python
+.. _matplotlib: https://stackoverflow.com/questions/21784641/installation-issue-with-matplotlib-python
 
-.. _tutorial: https://docs.python.org/3.6/tutorial/venv.html
+.. _tutorial: https://virtualenv.pypa.io/en/latest/
 
 Installation/Quickstart
 ========================
@@ -30,7 +29,7 @@ tool. If you prefer to download the source code directly, you can clone the COME
 Now, run COMET on your data. Give the files of your data as the first
 three arguments and your desired output directory as your second argument.
 
-In this Beta stage of COMET's development, your data must be formatted into three files in your input directory: 'markers.txt', 'cluster.txt', and 'tsne.txt'. See the :doc:`Manual<manual>` for more information.
+Your data must be formatted into three files in your input directory: 'markers.txt', 'cluster.txt', and 'vis.txt'. See the :doc:`Manual<usage>` for more information.
 
 In this example, we have our data located in the current directory. ``output/`` is the directory where COMET's output will be stored. 
 
@@ -38,9 +37,10 @@ In this example, we have our data located in the current directory. ``output/`` 
 
 .. code-block:: console
 		
-   $ hgmd marker_file tsne_file cluster_file output/
+   $ Comet marker_file vis_file cluster_file output/
 
-After this command is entered, COMET will run in the terminal, processing your data. See :doc:`Examples<examples>` for details on what this should look like.
+After this command is entered, COMET will run in the terminal,
+processing your data. See some :doc:`examples<Output>` for details on what this should look like.
 
 The optional statements are described as follows:
 
@@ -52,8 +52,7 @@ The optional statements are described as follows:
 
     Optional gene list. Pointing -g to a text file with a list of
     genes will only run COMET with these genes. By default, it will
-    use our own curated list of surface protein relevant genes. Gene
-    lists should be either comma delimited or line delimited.
+    run on all genes. Gene lists should be either comma delimited or line delimited.
 
 -C (int)
 
@@ -66,48 +65,49 @@ The optional statements are described as follows:
 -X (int)
 
     X-param of the XL-mHG test. Determines the percentage of ones
-    above the threshold. See the statistical section for more
-    info. Should only be values between 0 and 1.
+    above the threshold. See the :doc:`statistical<details>` section for more
+    info. Should only be values between 0 and 1. Defaults to .15 (15%)
 
 -L (int)
 
     L-param of the XL-mHG test. Determines the lowest threshold to
     consider.
-    See the statistical section for more info.
+    See the :doc:`statistical<details>` section for more info. Defaults to 2 * size of cluster
 
 -Abbrev (list)
 
     Abbrev is a variable to turn on the heuristics for a given
-    run. After typing '-Abbrev' , give a list of the number geene
+    run. After typing '-Abbrev' , give a list of the number gene
     combinations you would like to be treated with the heuristic. For
     example, if you want to turn on the heuristic for 3- gene
     combinations only, input [3]. If you would like them for both 2-
-    and 3- gene combinations, input [2,3].
+    and 3- gene combinations, input [2,3]. Defaults to an empty list.
 
 -K (int)
 
     The number of gene combinations you would like to consider. This
-    defaults to 2, can be at most 4 (for the time being). Note that
-    the 4- gene combinations do not have a tested heuristic available.
+    defaults to 2, can be at most 4 (for the time being). For example,
+    if 4 is chosen, COMET will run 2, 3, and 4 gene combinations.
 
 
 -Down (int)
 
     For turning on downsampling. Will turn the data set into a random
     sampling of this many cells. Preserves cluster percentages by
-    taking cells of each cluster at the same rate as the full set.
+    taking cells of each cluster at the same rate as the full
+    set. Defaults to no downsampling.
     
 -Trim (int)
 
     Integer input for determining the size of the output
-    files. Currently default is set to 2000, but an increase here will
+    files. Currently default is set to 2000 lines, but an increase here will
     give more combinations / singletons in the final ranked output files.
 
 -Count (Boolean)
 
-    For turning on count data graphs. Will graph the log(count+1)
-    instead of simply the count. Leads to nicer continuous expression
-    plots.
+    Will graph the log(expression+1). Leads to
+    nicer continuous expression plots when count data is used.
+    Defaults to False, will plot the inputted expression as is.
 
 -tenx (Boolean)
 
