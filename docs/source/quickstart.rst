@@ -20,7 +20,7 @@ page and select your operating system). Otherwise, you will not
 be able to set up the proper environment. You can check what python
 versions you have installed by using the following command:
 
-.. code-clock:: console
+.. code-block:: console
 
    $ ls -ls /usr/bin/python*
 
