@@ -39,7 +39,7 @@ the proper version of python
 The following line will activate the virtual environment, just be sure that the
 path used is the correct one with respect to the current working directory.
    
- .. code-block:: console
+.. code-block:: console
 
    $ source new_dir/bin/activate
 
@@ -62,6 +62,9 @@ simply type 'deactivate' and you will return to your usual python.
 
    $ deactivate
 
+Your virtual environment should now be set up. If you run into any
+errors with the above steps, please consult the python documentation
+at their tutorial_ .
 	
 The easiest way to install the package without the use of virtual
 environments is to simply run in the terminal:
@@ -73,9 +76,7 @@ environments is to simply run in the terminal:
 This will auto-download the depencencies necessary for running the
 tool. If you prefer to download the source code directly, you can
 clone the COMET source from our Github_, navigate to the cloned
-directory, then install it using Python. If you are having issues
-setting up the virtual environment, have a look at the documentation
-at python's tutorial_ .
+directory, then install it using Python.
 
 Now, run COMET on your data. Give the files of your data as the first
 three arguments and your desired output directory as your second argument.
