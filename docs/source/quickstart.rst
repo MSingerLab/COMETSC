@@ -23,11 +23,27 @@ commands can be used to set up the virtual environment assuming there
 are no active environments running on the computer.
 
 .. code-block:: console
+		
    $ pip install virtualenv
+
+.. code-block:: console
+		
    $ virtualenv new_dir --python=python3.6
+
+ .. code-block:: console
+		 
    $ source new_dir/bin/activate
+
+.. code-block:: console
+ 
    $ pip install COMETSC
+
+.. code-block:: console
+		
    $ Comet markers.txt tsne.txt cluster.txt output/
+
+.. code-block:: console
+
    $ deactivate
 
 The first line will install the virtual environment software to your
