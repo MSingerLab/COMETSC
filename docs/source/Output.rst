@@ -28,32 +28,32 @@ For each cluster the following output files will be generated:
 **Candidate marker panel output files:**
 
 * ``singleton_all_ranked`` :
-Single gene marker list containing the overall rankings based on the
-xl-mHG p-value and the absolute fold change. Includes genes with True
-Positive value greater than 0.15 and negation genes
-if they have a True Negative value of greater than 0.5  .
+  Single gene marker list containing the overall rankings based on the
+  xl-mHG p-value and the absolute fold change. Includes genes with True
+  Positive value greater than 0.15 and negation genes
+  if they have a True Negative value of greater than 0.5  .
 
 * ``singleton_positive_markers_ranked``:
-Single gene marker list as above, except without the negation
-genes. Useful if the focus is on positive markers.
+  Single gene marker list as above, except without the negation
+  genes. Useful if the focus is on positive markers.
 
 * ``singleton_full_unranked`` :
-ALL single genes, with no rank. Useful for finding genes that did not
-pass the thresholds in singleton_all_ranked
+  ALL single genes, with no rank. Useful for finding genes that did not
+  pass the thresholds in singleton_all_ranked
 
 * ``pair_final_ranking`` :
-Gives the gene-pairs ordered based on our ranking system of
-statistical relevance. Does not include all pairs.
+  Gives the gene-pairs ordered based on our ranking system of
+  statistical relevance. Does not include all pairs.
 
 * ``pair_full_unranked`` :
-Gives ALL gene-pairs with no ordering and no rankings. Useful for
-looking at pairs that did not show up in the ranked list.
+  Gives ALL gene-pairs with no ordering and no rankings. Useful for
+  looking at pairs that did not show up in the ranked list.
 
 * ``_trips`` :
-Three gene marker panels ranked (if enabled).
+  Three gene marker panels ranked (if enabled).
 
 * ``_quads`` :
-Four gene marker panels ranked (if enabled).
+  Four gene marker panels ranked (if enabled).
 
 
 * ``CSV  pair output example`` :
@@ -70,27 +70,27 @@ Shown below is t-sne format, but any two-dimensional visualization method is fin
 
 
 * ``Combined continuous/discrete plots``: 
-Gives the discrete and continuous plot for the single genes of the top
-performing pairs.
+  Gives the discrete and continuous plot for the single genes of the top
+  performing pairs.
 |combined| 
 
-* ``Discrete plots comparing combinations/singletons`` : 
-Discrete only plots that show a pair of genes each. Gives a
-visualization of the discrete dual-expression alongside each single gene's
-discrete expression.
+* ``Discrete plots comparing combinations/singletons`` :  
+  Discrete only plots that show a pair of genes each. Gives a
+  visualization of the discrete dual-expression alongside each single gene's
+  discrete expression.
 |discrete|
 
 * ``Singleton-only combined plots`` : 
-Plots that show the discrete and continuous versio  of the top
-performing single genes.
+  Plots that show the discrete and continuous versio  of the top
+  performing single genes.
 |sing_cmb| 
 
 * ``True positive/negative plot`` : 
-True positive/ True negative values for the top gene pairs.
+  True positive/ True negative values for the top gene pairs.
 |TPTN| 
 
 * ``Singleton-only TP/TN plot`` : 
-true positive / True negatives values for the top single genes.
+  true positive / True negatives values for the top single genes.
 |sing_TPTN| 
 
 

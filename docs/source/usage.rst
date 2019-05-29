@@ -18,10 +18,12 @@ for ease of view, but files should be given as plain text files.
   numerical gene expression value, corresponding to the row/cell and
   column/gene of the element. Tab delimited only. COMET does not do any preprocessing on 
   this file.
-  **Using the '-tenx' option in the terminal allows the input
-  of 10X data directly from the cellranger output. You must specify
-  the folder where the expression matrix is found instead of a single
-  file. Do not change the names of the files within this folder.**
+
+  
+**Using the '-tenx' option in the terminal allows the input
+of 10X data directly from the cellranger output. You must specify
+the folder where the expression matrix is found instead of a single
+file. Do not change the names of the files within this folder.**
 
   |markers|
   
