@@ -93,8 +93,10 @@ stored. To test your installation, you can download the following example inputs
    $ Comet tabmarker.txt tabtsne.txt tabcluster.txt output/
 
 After this command is entered, COMET will run in the terminal,
-processing your data. See some :doc:`examples<Output>` for details on
-what this should look like.
+processing your data. If you are following along on your terminal and
+the run finishes, the install was a success! 
+See some :doc:`examples<Output>` for details on
+what the outputs should look like.
 
 
 The optional statements are described as follows:
