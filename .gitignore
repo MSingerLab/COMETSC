@@ -123,3 +123,7 @@ venv.bak/
 .mypy_cache/
 
 .DS_Store
+
+/Comet/tabmarker.txt
+/Comet/tabcluster.txt
+/Comet/tabtsne.txt
