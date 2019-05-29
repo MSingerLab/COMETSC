@@ -1,25 +1,52 @@
 .. _Github: https://github.com/MSingerLab/COMETSC
 
-.. _Python: https://www.python.org/downloads/release/python-362/
+.. _here: https://www.python.org/downloads/release/python-362/
 
-.. _website: http://www.cometsc.com/index
+.. _website: http://www.cometsc.com/comet
 
-.. _matplotlib: https://stackoverflow.com/questions/21784641/installation-issue-with-matplotlib-python
+.. _stackoverflow: https://stackoverflow.com/questions/21784641/installation-issue-with-matplotlib-python
 
 .. _tutorial: https://virtualenv.pypa.io/en/latest/
 
-Installation/Quickstart
+Installation / Quickstart
 ========================
 
 To skip installation on your own machine and run COMET on your data through COMET's interface, check out our website_!
 
 To install COMET's Python implementation on your own machine, you
-should have Python_ version 3.6 downloaded & installed. If you do not, you will not
-be able to set up the proper environment. 
+should have Python version 3.6 downloaded & installed. If you do not,
+you can get it at the link here_ (scroll down to the bottom of the
+page and select your operating system). Otherwise, you will not
+be able to set up the proper environment. You can check what python
+versions you have installed by using the following command:
+
+.. code-clock:: console
+
+   $ ls -ls /usr/bin/python*
 
 As with all python usage, it is recommended to use python virtual
-environments to avoid conflicting package versions. The following
-commands can be used to set up the virtual environment assuming there
+environments to avoid conflicting package versions. We provide below
+two options for installation: direct installation and installation via
+a virtual environment.
+
+Direct Installation
+========================
+The easiest way to install the package without the use of virtual
+environments is to simply run in the terminal:
+
+.. code-block:: console
+
+   $ pip install COMETSC
+
+This will auto-download the depencencies necessary for running the
+tool. If you prefer to download the source code directly, you can
+clone the COMET source from our Github_, navigate to the cloned
+directory, then install it using Python.
+
+Installing via a Virtual Environment (Recommended)
+=================================
+
+The following commands can be used to set up the virtual environment assuming there
 are no active environments running on the computer.
 
 The first line will install the virtual environment software to your
@@ -58,25 +85,16 @@ Now run COMET on your data!  For example:
 When you are finished using the virtual environment,
 simply type 'deactivate' and you will return to your usual python.
    
-.. code-block:: console
+.. code-block:: console 
 
    $ deactivate
 
 Your virtual environment should now be set up. If you run into any
 errors with the above steps, please consult the python documentation
-at their tutorial_ .
+at their tutorial_ or reach out to us at cdelaney@ds.dfci.harvard.edu .
 	
-The easiest way to install the package without the use of virtual
-environments is to simply run in the terminal:
-
-.. code-block:: console
-
-   $ pip install COMETSC
-
-This will auto-download the depencencies necessary for running the
-tool. If you prefer to download the source code directly, you can
-clone the COMET source from our Github_, navigate to the cloned
-directory, then install it using Python.
+Usage
+========================
 
 Now, run COMET on your data. Give the files of your data as the first
 three arguments and your desired output directory as your second
@@ -185,14 +203,26 @@ Troubleshooting
 ========================    
 
 There has been a known issue with the compatibility of matplotlib with
-certain installations. A fix that has been successful in most test
-cases can be found at matplotlib_ , consisting of changing the
-matplotlibrc 'backend' variable to either 'Agg' or 'TkAgg'.
+certain installations on Mac OS devices.
+The error looks as follows:
+`RuntimeError: Python is not installed as a framework. The Mac OS X backend will not be able to function correctly if Python is not installed as a framework.`
+To fix this issue, change the matplotlibrc ‘backend’ variable to
+either ‘Agg’ or ‘TkAgg’ as discussed here. In your
+root directory, there should be a directory (~/.matplotlib) that can
+be edited to fix the problem. Maneuver to that directory, then create
+an empty file called matplotlibrc. If you add 'backend: TkAgg' or
+'backend: Agg' to this file and save, the matplotlib install should be
+fixed and Comet should run normally. This issue is discussed on
+stackoverflow_ as well. 
 
 
 The most common error when running COMET is the formatting of the
 input files. If a run is failing and you cannot figure out why, please
 consult the :doc:`Manual<usage>` to make sure the inputs are
 absolutely correct.
+
+Any further issues, please feel free to reach out to
+cdelaney@ds.dfci.harvard.edu with any questions, concerns, or
+troubleshooting problems.
     
 .. toctree::
