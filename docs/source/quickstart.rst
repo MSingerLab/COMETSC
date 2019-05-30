@@ -76,11 +76,6 @@ Now, install the proper COMET version to the virtual environment.
  
    $ pip install COMETSC
 
-Now run COMET on your data!  For example:
-   
-.. code-block:: console
-
-   $ Comet markers.txt tsne.txt cluster.txt output/
 
 When you are finished using the virtual environment,
 simply type 'deactivate' and you will return to your usual python.
@@ -97,14 +92,17 @@ Usage
 ========================
 
 Now, run COMET on your data. Give the files of your data as the first
-three arguments and your desired output directory as your second
+three arguments and your desired output directory as your fourth
 argument. Your data must be formatted into three files in your current
 directory.
 See the :doc:`Manual<usage>` for more information.
 
 In this example, we have our data located in the current
 directory. ``output/`` is the directory where COMET's output will be
-stored. To test your installation, you can download the following example inputs :download:`here <_static/example_ins.zip>` !
+stored. To test your installation, you can download the following
+example inputs :download:`here <_static/example_ins.zip>` ! Copy them
+to the directory of your choice and run the following command within
+the directory:
 
 .. code-block:: console
 		

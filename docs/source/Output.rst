@@ -69,27 +69,27 @@ Shown below is t-sne format, but any two-dimensional visualization method is fin
 
 
 
-* ``Combined continuous/discrete plots``: 
+* ``pairs_as_singletons``: 
   Gives the discrete and continuous plot for the single genes of the top
   performing pairs.
 |combined| 
 
-* ``Discrete plots comparing combinations/singletons`` :  
+* ``discrete_pairs`` :  
   Discrete only plots that show a pair of genes each. Gives a
   visualization of the discrete dual-expression alongside each single gene's
   discrete expression.
 |discrete|
 
-* ``Singleton-only combined plots`` : 
-  Plots that show the discrete and continuous versio  of the top
+* ``singleton`` : 
+  Plots that show the discrete and continuous version  of the top
   performing single genes.
 |sing_cmb| 
 
-* ``True positive/negative plot`` : 
+* ``Pair_TP_TN`` : 
   True positive/ True negative values for the top gene pairs.
 |TPTN| 
 
-* ``Singleton-only TP/TN plot`` : 
+* ``Singleton_TP_TN`` : 
   true positive / True negatives values for the top single genes.
 |sing_TPTN| 
 
