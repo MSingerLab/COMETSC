@@ -106,7 +106,7 @@ the directory:
 
 .. code-block:: console
 		
-   $ Comet tabmarker.txt tabtsne.txt tabcluster.txt output/
+   $ Comet tabmarker.txt tabvis.txt tabcluster.txt output/
 
 After this command is entered, COMET will run in the terminal,
 processing your data. If you are following along on your terminal and
