@@ -204,12 +204,10 @@ There has been a known issue with the compatibility of matplotlib with
 certain installations on Mac OS devices.
 The error looks as follows:
 `RuntimeError: Python is not installed as a framework. The Mac OS X backend will not be able to function correctly if Python is not installed as a framework.`
-To fix this issue, change the matplotlibrc ‘backend’ variable to
-either ‘Agg’ or ‘TkAgg’ as follows: 
+To fix this issue, change the matplotlibrc ‘backend’ variable to ‘Agg’ as follows: 
 In your root directory, there should be a directory called
 ~/.matplotlib that can be edited to fix the problem. Maneuver to that directory, then create
-an empty file called 'matplotlibrc'. If you add 'backend: TkAgg' or
-'backend: Agg' to this file and save, the matplotlib install should be
+an empty file called 'matplotlibrc'. If you add 'backend: Agg' to this file and save, the matplotlib install should be
 fixed and Comet should run normally. This issue is discussed on
 stackoverflow_ as well. If you already have a matplotlibrc file in the
 site packages from downloading matplotlib, maneuvering to that file and changing
