@@ -118,6 +118,7 @@ def read_data(cls_path, tsne_path, marker_path, gene_path, D, tenx, online):
         print(str(noww-now) + ' seconds')
         print('size: ' + str(matrix.shape))
         no_complement_marker_exp = matrix
+        no_complement_marker_exp.rename_axis('cell',axis=1,inplace=True)
     else:
         no_complement_marker_exp = pd.read_csv(
             marker_path,sep='\t', index_col=0
