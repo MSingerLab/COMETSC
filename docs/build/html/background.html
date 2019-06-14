@@ -82,7 +82,10 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Installation/Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Installation / Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html#direct-installation">Direct Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html#installing-via-a-virtual-environment-recommended">Installing via a Virtual Environment (Recommended)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html#usage">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html#troubleshooting">Troubleshooting</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="manual.html">User Manual</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Background</a><ul>
@@ -171,7 +174,7 @@
 <h2>The hypergeometric test<a class="headerlink" href="#the-hypergeometric-test" title="Permalink to this headline">¶</a></h2>
 <p>Traditional methods of extracting ‘marker’ proteins from a single-cell RNA sequencing dataset use the statistical t-test, finding single genes where the median expression in the specified cluster differ most from the median of the rest of the population. This method has limitations in utility and statistical rigor: most significantly, it cannot find sets of ‘marker’ proteins; only single proteins.</p>
 <p>COMET uses the hypergeometric statistical test to overcome these limitations. The hypergeometric test considers discrete expression/non-expression instead of a continuous expression scale, allowing us to test gene sets by considering expression/non-expression of the entire set. Combining genes using a continuous expression scale and t-tests is possible: for example, by simply using the n ‘best’ marker genes. This, however, is ineffective: combinations of genes do not necessarily mark the same cells as their components.</p>
-<p>Additionally, COMET uses Florian Wagner’s <a class="reference external" href="https://github.com/flo-compbio/xlmhg">implementation</a> of the ‘mHG’ statistical test, which in this context finds the most statisticall significant cutoff between expression/non-expression, given our continuous gene expression values.</p>
+<p>Additionally, COMET uses Florian Wagner’s <a class="reference external" href="https://github.com/flo-compbio/xlmhg">implementation</a> of the ‘mHG’ statistical test, which in this context finds the most statistically significant cutoff between expression/non-expression, given our continuous gene expression values.</p>
 <div class="toctree-wrapper compound">
 </div>
 </div>

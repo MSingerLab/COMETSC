@@ -82,7 +82,10 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Installation/Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Installation / Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html#direct-installation">Direct Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html#installing-via-a-virtual-environment-recommended">Installing via a Virtual Environment (Recommended)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html#usage">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html#troubleshooting">Troubleshooting</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="manual.html">User Manual</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="background.html">Background</a></li>
@@ -189,7 +192,7 @@
 <ul class="simple">
 <li>Per-cell gene expression values. Each gene must be normalized over cells.</li>
 <li>Cluster membership by cell.</li>
-<li>Per-cell 2-D t-SNE values, for plotting.</li>
+<li>Per-cell 2-D visualization coordinates, for plotting.</li>
 </ul>
 <p>In order to test ‘complement’ genes (i.e. expressed as the absence of a gene rather than the presence of a gene), COMET creates a new complement gene for each gene. These complement genes are treated exactly the same as normal genes, but their expression values are the negative of the expression values of their analogous gene. This allows COMET to find separate mHG cutoff values for genes and their complements.</p>
 </div>
@@ -220,6 +223,7 @@
 - Number of cells expressing the combination (A AND B);
 - Total number of cells.
 These parameters are usually referred to as <strong>k</strong>, <strong>s</strong>, <strong>M</strong>, and <strong>N</strong>, respectively.</p>
+<p>As a note, by default COMET will not consider any single genes with a True-Positive value of less then 15% in any multiple gene marker panels since the True-Positive rate can only decrease with the addition of genes to a marker panel. This also decreases the size of matrix multiplications.</p>
 <div class="section" id="finding-the-parameters-for-gene-pairs">
 <h3><a class="toc-backref" href="#id6">Finding the parameters for gene pairs</a><a class="headerlink" href="#finding-the-parameters-for-gene-pairs" title="Permalink to this headline">¶</a></h3>
 <p>For gene pairs, True Positive and True Negative rates can be computed efficiently using matrix multiplication. To understand this better, let’s take the case of a combination of two genes (A AND B). Let u1 be the vector whose i-th entry is 1 if cell i is a True Positive for gene A (i.e. if cell i belongs to cluster C and expresses gene A), and 0 otherwise. Define u2 similarly for gene B. Then the inner product of u1 with u2 will provide to the number of True Positives for (A AND B), i.e. the number of cells expressing (A AND B) that belong to cluster C. Dividing this inner product by the number of cells in cluster C will yield the True Positive rate. Organizing the True Positive vectors into a gene x cell matrix M, it follows that computing the True Positive rate for gene pairs boils down to matrix multiplication of M with its transpose. The result of this operation is a gene x gene matrix TP, where the (i,j)-th entry TP(i,j) is precisely the True Positive rate corresponding to the combination of gene Gi and gene Gj. This similarly applies to computing True Negative rates.</p>
@@ -227,8 +231,8 @@ These parameters are usually referred to as <strong>k</strong>, <strong>s</stron
 </div>
 <div class="section" id="gene-combinations">
 <h3><a class="toc-backref" href="#id7">3+ gene combinations</a><a class="headerlink" href="#gene-combinations" title="Permalink to this headline">¶</a></h3>
-<p>Combinations of 3 genes is currently implemented and turned on using the -K option. For each given combinations of 3 genes (A AND B AND C), COMET will compute a True Positive rate, True Negative rate as well as a Hypergeometric significance measure, as mentioned above. These computations leverage matrix multiplication. Due to the current computational expense, it can be run in full (if a cluster is available) or on lesser hardware with an abbreviated search space. The main bottleneck is matrix multiplication on computers with smaller memory loads. In the future, we will be implementing 4-gene combinations as well as optimizing and improving the 3-gene approach.</p>
-<p>For the existing 3-gene combinations , we construct an ~N^2 x Cells matrix containing 2-gene combinations (A AND B), then multiply by another N x Cells matrix containing gene C. This gives us an expression count matrix for the 3 gene combinations (large) and is then trimmed down to discard gene combinations such as AAA and AAB where there are gene repeats.</p>
+<p>Combinations of 3-4 genes are currently implemented and turned on using the -K option. For each given combination of  genes (A AND B AND C), COMET will compute a True Positive rate, True Negative rate as well as a Hypergeometric significance measure, as mentioned above. These computations leverage matrix multiplication. Due to the current computational expense, it can be run in full (if a cluster is available) or on lesser hardware with an abbreviated search space by turning on the heuristics. The main bottleneck is matrix multiplication on computers with smaller memory loads.</p>
+<p>For the 3-gene combinations , we construct an ~N^2 x Cells matrix containing 2-gene combinations (A AND B), then multiply by another N x Cells matrix containing gene C. This gives us an expression count matrix for the 3 gene combinations (large) and is then trimmed down to discard gene combinations such as AAA and AAB where there are gene repeats.</p>
 </div>
 </div>
 <div class="section" id="run-hypergeometric-test-on-pairs-using-counts">

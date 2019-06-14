@@ -25,7 +25,7 @@ There are three components:
 
 * Per-cell gene expression values. Each gene must be normalized over cells.
 * Cluster membership by cell.
-* Per-cell 2-D t-SNE values, for plotting.
+* Per-cell 2-D visualization coordinates, for plotting.
 
 In order to test 'complement' genes (i.e. expressed as the absence of a gene rather than the presence of a gene), COMET creates a new complement gene for each gene. These complement genes are treated exactly the same as normal genes, but their expression values are the negative of the expression values of their analogous gene. This allows COMET to find separate mHG cutoff values for genes and their complements.
 
@@ -70,6 +70,8 @@ Gene combinations are then ranked using the p-values of a Hypergeometric test lo
 - Total number of cells.
 These parameters are usually referred to as **k**, **s**, **M**, and **N**, respectively.
 
+As a note, by default COMET will not consider any single genes with a True-Positive value of less then 15% in any multiple gene marker panels since the True-Positive rate can only decrease with the addition of genes to a marker panel. This also decreases the size of matrix multiplications.
+
 Finding the parameters for gene pairs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -80,9 +82,9 @@ In this way, COMET finds the **k** and **M** parameters for the hypergeometric t
 3+ gene combinations
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-Combinations of 3 genes is currently implemented and turned on using the -K option. For each given combinations of 3 genes (A AND B AND C), COMET will compute a True Positive rate, True Negative rate as well as a Hypergeometric significance measure, as mentioned above. These computations leverage matrix multiplication. Due to the current computational expense, it can be run in full (if a cluster is available) or on lesser hardware with an abbreviated search space. The main bottleneck is matrix multiplication on computers with smaller memory loads. In the future, we will be implementing 4-gene combinations as well as optimizing and improving the 3-gene approach.
+Combinations of 3-4 genes are currently implemented and turned on using the -K option. For each given combination of  genes (A AND B AND C), COMET will compute a True Positive rate, True Negative rate as well as a Hypergeometric significance measure, as mentioned above. These computations leverage matrix multiplication. Due to the current computational expense, it can be run in full (if a cluster is available) or on lesser hardware with an abbreviated search space by turning on the heuristics. The main bottleneck is matrix multiplication on computers with smaller memory loads.
 
-For the existing 3-gene combinations , we construct an ~N^2 x Cells matrix containing 2-gene combinations (A AND B), then multiply by another N x Cells matrix containing gene C. This gives us an expression count matrix for the 3 gene combinations (large) and is then trimmed down to discard gene combinations such as AAA and AAB where there are gene repeats.
+For the 3-gene combinations , we construct an ~N^2 x Cells matrix containing 2-gene combinations (A AND B), then multiply by another N x Cells matrix containing gene C. This gives us an expression count matrix for the 3 gene combinations (large) and is then trimmed down to discard gene combinations such as AAA and AAB where there are gene repeats.
 
 6. Run hypergeometric test on pairs using counts.
 ----------------------------------------------------

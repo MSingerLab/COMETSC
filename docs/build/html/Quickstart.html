@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation/Quickstart &mdash; COMET  documentation</title>
+  <title>Installation / Quickstart &mdash; COMET  documentation</title>
   
 
   
@@ -82,7 +82,10 @@
             
             
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation/Quickstart</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation / Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#direct-installation">Direct Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#installing-via-a-virtual-environment-recommended">Installing via a Virtual Environment (Recommended)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#usage">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul class="simple">
 </ul>
 </li>
@@ -133,7 +136,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Installation/Quickstart</li>
+      <li>Installation / Quickstart</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -152,26 +155,95 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <p><a class="reference external" href="https://stackoverflow.com/questions/21784641/installation-issue-with-matplotlib-python">https://stackoverflow.com/questions/21784641/installation-issue-with-matplotlib-python</a></p>
-<div class="section" id="installation-quickstart">
-<h1>Installation/Quickstart<a class="headerlink" href="#installation-quickstart" title="Permalink to this headline">¶</a></h1>
-<p>To skip installation on your own machine and run COMET on your data through COMET’s interface, check out our <a class="reference external" href="http://www.cometsc.com/index">website</a>!</p>
-<p>To install COMET’s Python implementation on your own machine, you should first have <a class="reference external" href="https://www.python.org/downloads/">Python</a> version 3.6 installed.</p>
-<p>As with all python usage, it is recommended to use python virtual environments to avoid conflicting package versions. Find out how at python’s documentation <a class="reference external" href="https://docs.python.org/3.6/tutorial/venv.html">tutorial</a>.</p>
-<p>The easiest way to install the package is to simply run in the terminal:</p>
+  <div class="section" id="installation-quickstart">
+<h1>Installation / Quickstart<a class="headerlink" href="#installation-quickstart" title="Permalink to this headline">¶</a></h1>
+<p>To skip installation on your own machine and run COMET on your data through COMET’s interface, check out our <a class="reference external" href="http://www.cometsc.com/comet">website</a>!</p>
+<p>To install COMET’s Python implementation on your own machine, you
+should have Python version 3.6 downloaded &amp; installed. If you do not,
+you can get it at the link <a class="reference external" href="https://www.python.org/downloads/release/python-362/">here</a> (scroll down to the bottom of the
+page and select your operating system). Otherwise, you will not
+be able to set up the proper environment. You can check what python
+versions you have installed by using the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> ls -ls /usr/bin/python*
+</pre></div>
+</div>
+<p>As with all python usage, it is recommended to use python virtual
+environments to avoid conflicting package versions. We provide below
+two options for installation: direct installation and installation via
+a virtual environment.</p>
+</div>
+<div class="section" id="direct-installation">
+<h1>Direct Installation<a class="headerlink" href="#direct-installation" title="Permalink to this headline">¶</a></h1>
+<p>The easiest way to install the package without the use of virtual
+environments is to simply run in the terminal:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install COMETSC
 </pre></div>
 </div>
 <p>This will auto-download the depencencies necessary for running the
-tool. If you prefer to download the source code directly, you can clone the COMET source from our <a class="reference external" href="https://github.com/MSingerLab/COMETSC">Github</a>, navigate to the cloned directory, then install it using Python.</p>
-<p>Now, run COMET on your data. Give the files of your data as the first
-three arguments and your desired output directory as your second argument.</p>
-<p>In this Beta stage of COMET’s development, your data must be formatted into three files in your input directory: ‘markers.txt’, ‘cluster.txt’, and ‘tsne.txt’. See the <a class="reference internal" href="manual.html"><span class="doc">Manual</span></a> for more information.</p>
-<p>In this example, we have our data located in the current directory. <code class="docutils literal notranslate"><span class="pre">output/</span></code> is the directory where COMET’s output will be stored.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> hgmd marker_file tsne_file cluster_file output/
+tool. If you prefer to download the source code directly, you can
+clone the COMET source from our <a class="reference external" href="https://github.com/MSingerLab/COMETSC">Github</a>, navigate to the cloned
+directory, then install it using Python.</p>
+</div>
+<div class="section" id="installing-via-a-virtual-environment-recommended">
+<h1>Installing via a Virtual Environment (Recommended)<a class="headerlink" href="#installing-via-a-virtual-environment-recommended" title="Permalink to this headline">¶</a></h1>
+<p>The following commands can be used to set up the virtual environment assuming there
+are no active environments running on the computer.</p>
+<p>The first line will install the virtual environment software to your
+computer (assuming you already have pip installed).</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install virtualenv
 </pre></div>
 </div>
-<p>After this command is entered, COMET will run in the terminal, processing your data. See <span class="xref std std-doc">Examples</span> for details on what this should look like.</p>
+<p>The second line then sets up a new virtual environment directory of your choice with
+the proper version of python</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> virtualenv new_dir --python<span class="o">=</span>python3.6
+</pre></div>
+</div>
+<p>The following line will activate the virtual environment, just be sure that the
+path used is the correct one with respect to the current working directory.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">source</span> new_dir/bin/activate
+</pre></div>
+</div>
+<p>Now, install the proper COMET version to the virtual environment.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install COMETSC
+</pre></div>
+</div>
+<p>When you are finished using the virtual environment,
+simply type ‘deactivate’ and you will return to your usual python.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> deactivate
+</pre></div>
+</div>
+<p>Your virtual environment should now be set up. If you run into any
+errors with the above steps, please consult the python documentation
+at their <a class="reference external" href="https://virtualenv.pypa.io/en/latest/">tutorial</a> or reach out to us at <a class="reference external" href="mailto:cdelaney&#37;&#52;&#48;ds&#46;dfci&#46;harvard&#46;edu">cdelaney<span>&#64;</span>ds<span>&#46;</span>dfci<span>&#46;</span>harvard<span>&#46;</span>edu</a> .</p>
+</div>
+<div class="section" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<p>Now, run COMET on your data. Give the files of your data as the first
+three arguments and your desired output directory as your fourth
+argument. Your data must be formatted into three files in your current
+directory.
+See the <a class="reference internal" href="usage.html"><span class="doc">Manual</span></a> for more information.</p>
+<p>In this example, we have our data located in the current
+directory. <code class="docutils literal notranslate"><span class="pre">output/</span></code> is the directory where COMET’s output will be
+stored. To test your installation, you can download the following
+example inputs <a class="reference download internal" download="" href="_downloads/60641f9db59ac1a8e7ec38523c035cb5/example_ins.zip"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a> ! Copy them
+to the directory of your choice and run the following command within
+the directory:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> Comet tabmarker.txt tabvis.txt tabcluster.txt output/
+</pre></div>
+</div>
+<p>After this command is entered, COMET will run in the terminal,
+processing your data. If you are following along on your terminal and
+the run finishes, the install was a success!
+See some <a class="reference internal" href="Output.html"><span class="doc">examples</span></a> for details on
+what the outputs should look like.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Why are genes I don’t want showing up in my output?? -&gt; Our
+current marker list is inclusive rather than exclusive. If
+you find irrelevant non surface markers (e.g. secreted), you
+can manualy delete them from the list you used and upload the new list.</p>
+</div>
 <p>The optional statements are described as follows:</p>
 <p>-h ()</p>
 <blockquote>
@@ -180,8 +252,7 @@ three arguments and your desired output directory as your second argument.</p>
 <blockquote>
 <div>Optional gene list. Pointing -g to a text file with a list of
 genes will only run COMET with these genes. By default, it will
-use our own curated list of surface protein relevant genes. Gene
-lists should be either comma delimited or line delimited.</div></blockquote>
+run on all genes. Gene lists should be either comma delimited or line delimited.</div></blockquote>
 <p>-C (int)</p>
 <blockquote>
 <div>Multi-process option. This allows the user to choose how many
@@ -192,41 +263,42 @@ run faster. Defaults to 1.</div></blockquote>
 <p>-X (int)</p>
 <blockquote>
 <div>X-param of the XL-mHG test. Determines the percentage of ones
-above the threshold. See the statistical section for more
-info. Should only be values between 0 and 1.</div></blockquote>
+above the threshold. See the <a class="reference internal" href="details.html"><span class="doc">statistical</span></a> section for more
+info. Should only be values between 0 and 1. Defaults to .15 (15%)</div></blockquote>
 <p>-L (int)</p>
 <blockquote>
 <div>L-param of the XL-mHG test. Determines the lowest threshold to
 consider.
-See the statistical section for more info.</div></blockquote>
+See the <a class="reference internal" href="details.html"><span class="doc">statistical</span></a> section for more info. Defaults to 2 * size of cluster</div></blockquote>
 <p>-Abbrev (list)</p>
 <blockquote>
 <div>Abbrev is a variable to turn on the heuristics for a given
-run. After typing ‘-Abbrev’ , give a list of the number geene
+run. After typing ‘-Abbrev’ , give a list of the number gene
 combinations you would like to be treated with the heuristic. For
 example, if you want to turn on the heuristic for 3- gene
 combinations only, input [3]. If you would like them for both 2-
-and 3- gene combinations, input [2,3].</div></blockquote>
+and 3- gene combinations, input [2,3]. Defaults to an empty list.</div></blockquote>
 <p>-K (int)</p>
 <blockquote>
 <div>The number of gene combinations you would like to consider. This
-defaults to 2, can be at most 4 (for the time being). Note that
-the 4- gene combinations do not have a tested heuristic available.</div></blockquote>
+defaults to 2, can be at most 4 (for the time being). For example,
+if 4 is chosen, COMET will run 2, 3, and 4 gene combinations.</div></blockquote>
 <p>-Down (int)</p>
 <blockquote>
 <div>For turning on downsampling. Will turn the data set into a random
 sampling of this many cells. Preserves cluster percentages by
-taking cells of each cluster at the same rate as the full set.</div></blockquote>
+taking cells of each cluster at the same rate as the full
+set. Defaults to no downsampling.</div></blockquote>
 <p>-Trim (int)</p>
 <blockquote>
 <div>Integer input for determining the size of the output
-files. Currently default is set to 2000, but an increase here will
+files. Currently default is set to 2000 lines, but an increase here will
 give more combinations / singletons in the final ranked output files.</div></blockquote>
 <p>-Count (Boolean)</p>
 <blockquote>
-<div>For turning on count data graphs. Will graph the log(count+1)
-instead of simply the count. Leads to nicer continuous expression
-plots.</div></blockquote>
+<div>Will graph the log(expression+1). Leads to
+nicer continuous expression plots when count data is used.
+Defaults to False, will plot the inputted expression as is.</div></blockquote>
 <p>-tenx (Boolean)</p>
 <blockquote>
 <div>For turning on tenx file integration. To submit a 10X format
@@ -243,9 +315,24 @@ at the 15 largest clusters.</div></blockquote>
 <div class="section" id="troubleshooting">
 <h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h1>
 <p>There has been a known issue with the compatibility of matplotlib with
-certain installations. A fix that has been successful in most test
-cases can be found at <a class="reference internal" href="#matplotlib">matplotlib</a> , consisting of changing the
-matplotlibrc ‘backend’ variable to either ‘Agg’ or ‘TkAgg’.</p>
+certain installations on Mac OS devices.
+The error looks as follows:
+<cite>RuntimeError: Python is not installed as a framework. The Mac OS X backend will not be able to function correctly if Python is not installed as a framework.</cite>
+To fix this issue, change the matplotlibrc ‘backend’ variable to ‘Agg’ as follows:
+In your root directory, there should be a directory called
+~/.matplotlib that can be edited to fix the problem. Maneuver to that directory, then create
+an empty file called ‘matplotlibrc’. If you add ‘backend: Agg’ to this file and save, the matplotlib install should be
+fixed and Comet should run normally. This issue is discussed on
+<a class="reference external" href="https://stackoverflow.com/questions/21784641/installation-issue-with-matplotlib-python">stackoverflow</a> as well. If you already have a matplotlibrc file in the
+site packages from downloading matplotlib, maneuvering to that file and changing
+the backend as described above may also fix the problem.</p>
+<p>The most common error when running COMET is the formatting of the
+input files. If a run is failing and you cannot figure out why, please
+consult the <a class="reference internal" href="usage.html"><span class="doc">Manual</span></a> to make sure the inputs are
+absolutely correct.</p>
+<p>Any further issues, please feel free to reach out to
+<a class="reference external" href="mailto:cdelaney&#37;&#52;&#48;ds&#46;dfci&#46;harvard&#46;edu">cdelaney<span>&#64;</span>ds<span>&#46;</span>dfci<span>&#46;</span>harvard<span>&#46;</span>edu</a> with any questions, concerns, or
+troubleshooting problems.</p>
 <div class="toctree-wrapper compound">
 </div>
 </div>
