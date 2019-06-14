@@ -94,10 +94,18 @@ def read_data(cls_path, tsne_path, marker_path, gene_path, D, tenx, online):
     cls_ser = pd.read_csv(
         cls_path, sep='\t', index_col=0, names=['cell', 'cluster'], squeeze=True
     )
+    if np.isnan(cls_ser[0]):
+        cls_ser = pd.read_csv(
+        cls_path, sep=',', index_col=0, names=['cell', 'cluster'], squeeze=True )
 
     tsne = pd.read_csv(
         tsne_path, sep='\t', index_col=0, names=['cell', 'tSNE_1', 'tSNE_2']
     )
+    if np.isnan(tsne['tSNE_1'][0]):
+        tsne = pd.read_csv(
+        tsne_path, sep=',', index_col=0, names=['cell', 'tSNE_1', 'tSNE_2'] )
+
+    
     start_= time.time()
     tenx = int(tenx)
     if tenx == 1:
@@ -120,10 +128,23 @@ def read_data(cls_path, tsne_path, marker_path, gene_path, D, tenx, online):
         no_complement_marker_exp = matrix
         no_complement_marker_exp.rename_axis('cell',axis=1,inplace=True)
     else:
-        no_complement_marker_exp = pd.read_csv(
-            marker_path,sep='\t', index_col=0
-            ).rename_axis('cell',axis=1)
 
+        #Should allow either tab OR comma delimited formats
+        try:
+            no_complement_marker_exp = pd.read_csv(
+                marker_path,sep='\t', index_col=0
+                ).rename_axis('cell',axis=1)
+            if len(no_complement_marker_exp.columns) == 0:
+                raise Exception
+            elif len(no_complement_marker_exp.index) == 0:
+                raise Exception
+            else:
+                pass
+        except:
+            no_complement_marker_exp = pd.read_csv(
+                marker_path,sep=',', index_col=0
+                ).rename_axis('cell',axis=1)
+           
     if no_complement_marker_exp.shape[1] == cls_ser.shape[0]:
         pass
     else:
@@ -134,8 +155,10 @@ def read_data(cls_path, tsne_path, marker_path, gene_path, D, tenx, online):
                 cls_ser.drop(labels=index,inplace=True)
     
     #gene list filtering
+    no_complement_marker_exp = no_complement_marker_exp.loc[~no_complement_marker_exp.index.duplicated(keep='first')]
     no_complement_marker_exp = np.transpose(no_complement_marker_exp)
     no_complement_marker_exp.columns = [x.upper() for x in no_complement_marker_exp.columns]
+    no_complement_marker_exp = no_complement_marker_exp.loc[~no_complement_marker_exp.index.duplicated(keep='first')]
     #gene filtering
     #-------------#
     if gene_path is None:
