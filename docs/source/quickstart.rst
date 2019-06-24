@@ -114,8 +114,9 @@ the run finishes, the install was a success!
 See some :doc:`examples<Output>` for details on
 what the outputs should look like.
 
-.. note:: Why are genes I don't want showing up in my output?? -> Our
-	  current marker list is inclusive rather than exclusive. If
+.. note:: Why does my output contain genes that are not relevant
+          (e.g. are secreted rather than cell-surface)??
+	  Our current marker list is inclusive rather than exclusive. If
 	  you find irrelevant non surface markers (e.g. secreted), you
 	  can manualy delete them from the list you used and upload the new list.
 
