@@ -208,9 +208,19 @@ Troubleshooting
 ========================    
 
 There has been a known issue with the compatibility of matplotlib with
-certain installations on Mac OS devices.
-The error looks as follows:
-`RuntimeError: Python is not installed as a framework. The Mac OS X backend will not be able to function correctly if Python is not installed as a framework.`
+certain installations.
+The errors may look as follows:
+
+`RuntimeError: Python is not installed as a framework. The Mac OS X
+backend will not be able to function correctly if Python is not
+installed as a framework.`
+
+`ModuleNotFoundError: No module named 'tkinter'`
+
+This issue occurs when the python environment is using the wrong
+version of the matplotlib backend variable, a setting used for a
+variety of different plotting schemes.
+
 To fix this issue, change the matplotlibrc ‘backend’ variable to ‘Agg’ as follows: 
 In your root directory, there should be a directory called
 ~/.matplotlib that can be edited to fix the problem. Maneuver to that directory, then create
