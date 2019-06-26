@@ -221,11 +221,16 @@ This issue occurs when the python environment is using the wrong
 version of the matplotlib backend variable, a setting used for a
 variety of different plotting schemes.
 
-To fix this issue, change the matplotlibrc ‘backend’ variable to ‘Agg’ as follows: 
-In your root directory, there should be a directory called
-~/.matplotlib that can be edited to fix the problem. Maneuver to that directory, then create
-an empty file called 'matplotlibrc'. If you add 'backend: Agg' to this file and save, the matplotlib install should be
-fixed and Comet should run normally. This issue is discussed on
+To fix this issue, change the matplotlibrc ‘backend’ variable to ‘Agg’
+as follows:
+
+cd ~/.matplotlib
+
+Create an empty file called 'matplotlibrc' (e.g. vim matplorlibrc)
+
+Add 'backend: Agg' to this file and save (esc+:+w+q)
+
+The matplotlib install should be fixed and Comet should run normally. This issue is discussed on
 stackoverflow_ as well. If you already have a matplotlibrc file in the
 site packages from downloading matplotlib, maneuvering to that file and changing
 the backend as described above may also fix the problem.
