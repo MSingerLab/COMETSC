@@ -300,8 +300,8 @@ def make_plot(ax, title, coords, cmap, draw_cbar=False):
     Make a single graph on ax with given specs.  Plots only absolute values.
     """
     ax.set_title(title)#,fontdict={'fontsize':6})
-    ax.set_xlabel('tSNE_1')
-    ax.set_ylabel('tSNE_2')
+    ax.set_xlabel('Vis_X')
+    ax.set_ylabel('Vis_Y')
     sc = ax.scatter(
         x=coords[0],
         y=coords[1],

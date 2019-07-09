@@ -127,7 +127,7 @@ def read_data(cls_path, tsne_path, marker_path, gene_path, D, tenx, online):
         print('size: ' + str(matrix.shape))
         no_complement_marker_exp = matrix
         no_complement_marker_exp.rename_axis('cell',axis=1,inplace=True)
-    else:
+     else:
 
         #Should allow either tab OR comma delimited formats
         try:
@@ -190,6 +190,7 @@ def read_data(cls_path, tsne_path, marker_path, gene_path, D, tenx, online):
 
     
         new_no_comp_mark_exp = pd.DataFrame()
+        master_gene_list = [y.upper() for y in master_gene_list]
         for gene in master_gene_list:
             try:
                 new_no_comp_mark_exp[gene] = no_complement_marker_exp[gene]
