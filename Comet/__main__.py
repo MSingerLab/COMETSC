@@ -127,7 +127,7 @@ def read_data(cls_path, tsne_path, marker_path, gene_path, D, tenx, online):
         print('size: ' + str(matrix.shape))
         no_complement_marker_exp = matrix
         no_complement_marker_exp.rename_axis('cell',axis=1,inplace=True)
-     else:
+    else:
 
         #Should allow either tab OR comma delimited formats
         try:
