@@ -6,7 +6,7 @@ def read(filename):
 
 setup(
     name = 'COMETSC',
-    version = '0.1.7',
+    version = '0.1.9',
     long_description=read('README.md'),
     packages = ['Comet'],
     install_requires=[
@@ -23,7 +23,7 @@ setup(
         'jsonschema==2.6.0',
         'jupyter-core==4.4.0',
         'kiwisolver==1.0.1',
-        'matplotlib==2.2.2',
+        'matplotlib==3.0.0',
         'more-itertools==4.2.0',
         'nbformat==4.4.0',
         'numpy==1.14.5',
