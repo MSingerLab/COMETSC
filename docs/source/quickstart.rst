@@ -114,6 +114,17 @@ the run finishes, the install was a success!
 See some :doc:`examples<Output>` for details on
 what the outputs should look like.
 
+If, for example, you would like to skip the visualization step, simply
+add the "-skipvis" option as shown below:
+
+.. code-block:: console
+		
+   $ Comet tabmarker.txt tabvis.txt tabcluster.txt output/ -skipvis True	
+
+
+All optional arguments for the tool are described below in detail.
+   
+   
 .. note:: Why does my output contain genes that are not relevant
           (e.g. are secreted rather than cell-surface)??
 	  Our current marker list is inclusive rather than exclusive. If
@@ -122,7 +133,7 @@ what the outputs should look like.
 
 
 
-The optional statements are described as follows:
+The optional statements are available as follows:
 
 -h ()
 
@@ -202,6 +213,16 @@ The optional statements are described as follows:
     Online version of COMET, turning this on will produce a run as if
     it were submitted to the interface. This limits the run to looking
     at the 15 largest clusters.
+
+-skipvis (Boolean)
+
+    Setting this to true will skip the visualization section of the
+    tool. Useful for speeding things up or if a user does not have
+    coordinates to use. **Please Note:** The tool stilll expects an
+    input for the visualization file, so just use anything that will
+    fill that spot. Can be an empty text file or even one of the files
+    already in use (e.g. cluster file), it will not be used.
+    
 
     
 Troubleshooting
