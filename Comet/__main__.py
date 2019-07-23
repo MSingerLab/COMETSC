@@ -27,8 +27,8 @@ def init_parser(parser):
         help=("Marker file input")
     )
     parser.add_argument(
-        'tsne', type=str,
-        help=("tsne file input")
+        'vis', type=str,
+        help=("vis file input")
     )
     parser.add_argument(
         'cluster', type=str,
@@ -82,15 +82,18 @@ def init_parser(parser):
         '-online', nargs='?',default=False,
         help="Set to True for online version."
     )
+    parser.add_argument(
+        '-skipvis', nargs='?',default=False,
+        help="Set to True to skip visualizations."
+    )
     return parser
 
 
-def read_data(cls_path, tsne_path, marker_path, gene_path, D, tenx, online):
+def read_data(cls_path, tsne_path, marker_path, gene_path, D, tenx, online,skipvis):
     """
     Reads in cluster series, tsne data, marker expression without complements
     at given paths.
     """
-    
     cls_ser = pd.read_csv(
         cls_path, sep='\t', index_col=0, names=['cell', 'cluster'], squeeze=True
     )
@@ -98,14 +101,17 @@ def read_data(cls_path, tsne_path, marker_path, gene_path, D, tenx, online):
         cls_ser = pd.read_csv(
         cls_path, sep=',', index_col=0, names=['cell', 'cluster'], squeeze=True )
 
-    tsne = pd.read_csv(
-        tsne_path, sep='\t', index_col=0, names=['cell', 'tSNE_1', 'tSNE_2']
-    )
-    if np.isnan(tsne['tSNE_1'][0]):
+    if skipvis == 1:
+        tsne = None
+        pass
+    else:
         tsne = pd.read_csv(
-        tsne_path, sep=',', index_col=0, names=['cell', 'tSNE_1', 'tSNE_2'] )
+            tsne_path, sep='\t', index_col=0, names=['cell', 'tSNE_1', 'tSNE_2']
+        )
+        if np.isnan(tsne['tSNE_1'][0]):
+            tsne = pd.read_csv(
+            tsne_path, sep=',', index_col=0, names=['cell', 'tSNE_1', 'tSNE_2'] )
 
-    
     start_= time.time()
     tenx = int(tenx)
     if tenx == 1:
@@ -275,7 +281,7 @@ def read_data(cls_path, tsne_path, marker_path, gene_path, D, tenx, online):
             
     return (cls_ser, tsne, no_complement_marker_exp, gene_path)
 
-def process(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_path,pickle_path,cluster_number,K,abbrev,cluster_overall,Trim,count_data):
+def process(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_path,pickle_path,cluster_number,K,abbrev,cluster_overall,Trim,count_data,skipvis):
     #for cls in clusters:
     # To understand the flow of this section, read the print statements.
     heur_limit = min(50,len(marker_exp.columns))
@@ -582,33 +588,37 @@ def process(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_pa
             )
     else:
         quads_final = int(1)
-    print('Drawing plots...')
     #plt.bar(list(histogram.keys()), histogram.values(), color='b')
     #plt.savefig(vis_path + '/cluster_' + str(cls) + '_pair_histogram')
 
     #if cls == fincls:
     # cls = 0
-    vis.make_plots(
-        pair=ranked_pair,
-        sing=sing_output,
-        sing_tp_tn=sing_tp_tn,
-        xlmhg=xlmhg,
-        trips=trips_output,
-        quads_fin=quads_final,
-        tsne=tsne,
-        discrete_exp=discrete_exp_full,
-        marker_exp=marker_exp,
-        plot_pages=plot_pages,
-        combined_path=vis_path + '/cluster_' + str(cls) + '_pairs_as_singletons',
-        sing_combined_path=vis_path + '/cluster_' +
-        str(cls) + '_singleton',
-        discrete_path=vis_path + '/cluster_' + str(cls) + '_discrete_pairs',
-        tptn_path=vis_path + 'cluster_' + str(cls) + 'pair_TP_TN',
-        trips_path=vis_path + 'cluster_' + str(cls) + '_discrete_trios',
-        quads_path=vis_path + 'cluster_' + str(cls) + '_discrete_quads',
-        sing_tptn_path=vis_path + 'cluster_' + str(cls) + '_singleton_TP_TN',
-        count_data = count_data
-        )
+    if skipvis == 1:
+        print('Skipping plots...')
+        pass
+    else:
+        print('Drawing plots...')
+        vis.make_plots(
+            pair=ranked_pair,
+            sing=sing_output,
+            sing_tp_tn=sing_tp_tn,
+            xlmhg=xlmhg,
+            trips=trips_output,
+            quads_fin=quads_final,
+            tsne=tsne,
+            discrete_exp=discrete_exp_full,
+            marker_exp=marker_exp,
+            plot_pages=plot_pages,
+            combined_path=vis_path + '/cluster_' + str(cls) + '_pairs_as_singletons',
+            sing_combined_path=vis_path + '/cluster_' +
+            str(cls) + '_singleton',
+            discrete_path=vis_path + '/cluster_' + str(cls) + '_discrete_pairs',
+            tptn_path=vis_path + 'cluster_' + str(cls) + 'pair_TP_TN',
+            trips_path=vis_path + 'cluster_' + str(cls) + '_discrete_trios',
+            quads_path=vis_path + 'cluster_' + str(cls) + '_discrete_quads',
+            sing_tptn_path=vis_path + 'cluster_' + str(cls) + '_singleton_TP_TN',
+            count_data = count_data
+            )
     end_cls_time=time.time()
     print(str(end_cls_time - start_cls_time) + ' seconds')
     #time.sleep(10000)
@@ -645,14 +655,14 @@ def main():
     X = args.X
     L = args.L
     marker_file = args.marker
-    tsne_file = args.tsne
+    tsne_file = args.vis
     cluster_file = args.cluster
     gene_file = args.g
     Trim = args.Trim
     count_data = args.Count
     tenx = args.tenx
     online = args.online
-    
+    skipvis = args.skipvis
     plot_pages = 30  # number of genes to plot (starting with highest ranked)
 
     # TODO: gene pairs with expression ratio within the cluster of interest
@@ -740,6 +750,15 @@ def main():
             online = int(0)
     else:
         online = int(0)
+    if skipvis is not None:
+        if skipvis == str(True):
+            skipvis = int(1)
+        elif skipvis == 'yes':
+            skipvis = int(1)
+        else:
+            skipvis = int(0)
+    else:
+        skipvis = int(0)
     print("Reading data...")
     if gene_file is None:
         (cls_ser, tsne, no_complement_marker_exp, gene_path) = read_data(
@@ -749,8 +768,8 @@ def main():
             gene_path=None,
             D=Down,
             tenx=tenx,
-            online=online
-        )
+            online=online,
+            skipvis=skipvis)
     else:
         (cls_ser, tsne, no_complement_marker_exp, gene_path) = read_data(
             cls_path=cluster_file,
@@ -759,8 +778,8 @@ def main():
             gene_path=gene_file,
             D=Down,
             tenx=tenx,
-            online=online
-        )
+            online=online,
+            skipvis=skipvis)
     print("Generating complement data...")
     marker_exp = hgmd.add_complements(no_complement_marker_exp)
     #throw out vals that show up in expression matrix but not in cluster assignments
@@ -836,7 +855,7 @@ def main():
         #clusters = [1 2 3 4 5 6] & cores = 4 --> new_clusters = [1 2 3 4], new_clusters = [5 6]
         for cls in new_clusters:
             p = multiprocessing.Process(target=process,
-                args=(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_path,pickle_path,cluster_number,K,Abbrev,cluster_overall,Trim,count_data))
+                args=(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_path,pickle_path,cluster_number,K,Abbrev,cluster_overall,Trim,count_data,skipvis))
             jobs.append(p)
             p.start()
         p.join()
