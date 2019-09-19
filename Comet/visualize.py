@@ -41,6 +41,7 @@ def make_plots(
     General function for all visualization generation.  Arguments should be
     self-explanatory.  See __main__.
     """
+
     # cutoff maps genes to their (absolute) cutoff. I.e. complements are mapped
     # to positive cutoffs.
     #print(discrete_exp)
@@ -62,6 +63,15 @@ def make_plots(
     s_short = sing[sing['Plot']==1]
     #s_short = sing.iloc[:plot_pages]
 
+    neg_vals = 1
+
+    for col in marker_exp:
+        if min(marker_exp[col]) >= 0:
+            pass
+        else:
+            neg_vals = 0
+
+    
     if count_data == 1:
         marker_exp = marker_exp.applymap(lambda x: math.log(abs(x)+1,2))
         #marker_exp = marker_exp.applymap(lambda x: min(x,1500))
@@ -158,7 +168,7 @@ def make_plots(
     print("Drawing discrete plots for pairs...")
     try:
         make_discrete_plots(
-            tsne, discrete_exp, d_plot_genes, discrete_path, 2
+            tsne, discrete_exp, d_plot_genes, discrete_path, 2, neg_vals
         )
     except Exception as err:
         print('No plots generated')
@@ -169,7 +179,7 @@ def make_plots(
         print("Drawing discrete plots for trips...")
         try:
             make_discrete_plots(
-                tsne, discrete_exp, t_plot_genes, trips_path, 3
+                tsne, discrete_exp, t_plot_genes, trips_path, 3, neg_vals
                 )
         except Exception as err:
             print('no plots generated')
@@ -181,7 +191,7 @@ def make_plots(
         print("Drawing discrete plots for quads...")
         try:
             make_discrete_plots(
-                tsne, discrete_exp, q_plot_genes, quads_path, 4
+                tsne, discrete_exp, q_plot_genes, quads_path, 4, neg_vals
                 )
         except Exception as err:
             print('no plots generated')
@@ -209,7 +219,7 @@ def make_plots(
     print("Drawing combined plots...")
     try:
         make_combined_plots(
-            tsne, discrete_exp, marker_exp, c_plot_genes, combined_path
+            tsne, discrete_exp, marker_exp, c_plot_genes, combined_path, neg_vals
             )
     except Exception as err:
         print('no plots generated')
@@ -226,7 +236,7 @@ def make_plots(
     print("Drawing singleton combined plots...")
     try:
         make_combined_plots(
-            tsne, discrete_exp, marker_exp, c_s_plot_genes, sing_combined_path
+            tsne, discrete_exp, marker_exp, c_s_plot_genes, sing_combined_path, neg_vals
             )
     except Exception as err:
         print('no plots generated')
@@ -294,26 +304,44 @@ def make_quads_title(gene_1,gene_2,gene_3,gene_4,rank,cutoff_val):
         return ("rank %.0f: %s+%s+%s" % (rank, gene_1, gene_2, gene_3))
     else:
         return ("rank %.0f: %s+%s+%s+%s" % (rank, gene_1, gene_2, gene_3, gene_4))
-    
-def make_plot(ax, title, coords, cmap, draw_cbar=False):
+
+
+#Need another version of this for non-negations that doesnt do absolute value
+def make_plot(neg_vals, ax, title, coords, cmap, draw_cbar=False):
     """
     Make a single graph on ax with given specs.  Plots only absolute values.
     """
-    ax.set_title(title)#,fontdict={'fontsize':6})
-    ax.set_xlabel('Vis_X')
-    ax.set_ylabel('Vis_Y')
-    sc = ax.scatter(
-        x=coords[0],
-        y=coords[1],
-        c=abs(coords[2]),
-        s=4,
-        cmap=cmap
-    )
-    if draw_cbar:
-        plt.colorbar(sc, ax=ax)
+
+    if neg_vals == 1:
+    
+        ax.set_title(title)#,fontdict={'fontsize':6})
+        ax.set_xlabel('Vis_X')
+        ax.set_ylabel('Vis_Y')
+        sc = ax.scatter(
+            x=coords[0],
+            y=coords[1],
+            c=abs(coords[2]),
+            s=4,
+            cmap=cmap
+        )
+        if draw_cbar:
+            plt.colorbar(sc, ax=ax)
+    else:
+        ax.set_title(title)#,fontdict={'fontsize':6})
+        ax.set_xlabel('Vis_X')
+        ax.set_ylabel('Vis_Y')
+        sc = ax.scatter(
+            x=coords[0],
+            y=coords[1],
+            c=coords[2],
+            s=4,
+            cmap=cmap
+        )
+        if draw_cbar:
+            plt.colorbar(sc, ax=ax)
 
 
-def make_discrete_plots(tsne, discrete_exp, plot_genes, path,num):
+def make_discrete_plots(tsne, discrete_exp, plot_genes, path,num,neg_vals):
     """Plots discrete gene expression of paired genes to PDF.
 
     For each gene pair listed in plot_genes, make three scatterplots.  First, a
@@ -333,7 +361,7 @@ def make_discrete_plots(tsne, discrete_exp, plot_genes, path,num):
 
     :returns: Nothing.
     """
-    def make_quads_discrete_page(fig, ax_triple, titles, gene_1, gene_2, gene_3,gene_4):
+    def make_quads_discrete_page(neg_vals, fig, ax_triple, titles, gene_1, gene_2, gene_3,gene_4):
         """Make page with quads discrete plots given titles and genes."""
         coords_df = tsne.merge(discrete_exp[[gene_1, gene_2, gene_3,gene_4]], on='cell')
         coords_df['pair'] = coords_df[gene_1] * coords_df[gene_2]
@@ -342,6 +370,7 @@ def make_discrete_plots(tsne, discrete_exp, plot_genes, path,num):
 
         for (graph_index, z_label) in ((0, 'quads_fin'), (1, gene_1), (2, gene_2), (3, gene_3), (4, gene_4)):
             make_plot(
+                neg_vals,
                 ax=ax_triple[graph_index],
                 title=titles[graph_index],
                 coords=(
@@ -353,7 +382,7 @@ def make_discrete_plots(tsne, discrete_exp, plot_genes, path,num):
             )
 
     
-    def make_trips_discrete_page(fig, ax_triple, titles, gene_1, gene_2, gene_3):
+    def make_trips_discrete_page(neg_vals, fig, ax_triple, titles, gene_1, gene_2, gene_3):
         """Make page with trips discrete plots given titles and genes."""
         coords_df = tsne.merge(discrete_exp[[gene_1, gene_2, gene_3]], on='cell')
         coords_df['pair'] = coords_df[gene_1] * coords_df[gene_2]
@@ -361,6 +390,7 @@ def make_discrete_plots(tsne, discrete_exp, plot_genes, path,num):
 
         for (graph_index, z_label) in ((0, 'trips'), (1, gene_1), (2, gene_2), (3, gene_3)):
             make_plot(
+                neg_vals,
                 ax=ax_triple[graph_index],
                 title=titles[graph_index],
                 coords=(
@@ -371,13 +401,14 @@ def make_discrete_plots(tsne, discrete_exp, plot_genes, path,num):
                 cmap=CMAP_DISCRETE
             )
         
-    def make_pair_discrete_page(fig, ax_triple, titles, gene_1, gene_2):
+    def make_pair_discrete_page(neg_vals, fig, ax_triple, titles, gene_1, gene_2):
         """Make page with three discrete plots given titles and genes."""
         coords_df = tsne.merge(discrete_exp[[gene_1, gene_2]], on='cell')
         coords_df['pair'] = coords_df[gene_1] * coords_df[gene_2]
 
         for (graph_index, z_label) in ((0, 'pair'), (1, gene_1), (2, gene_2)):
             make_plot(
+                neg_vals,
                 ax=ax_triple[graph_index],
                 title=titles[graph_index],
                 coords=(
@@ -388,11 +419,12 @@ def make_discrete_plots(tsne, discrete_exp, plot_genes, path,num):
                 cmap=CMAP_DISCRETE
             )
 
-    def make_single_discrete_page(fig, ax_triple, title, gene):
+    def make_single_discrete_page(neg_vals, fig, ax_triple, title, gene):
         """Make page with one discrete plot given title and gene"""
         print(title)
         coords_df = tsne.merge(discrete_exp[[gene]], on='cell')
         make_plot(
+            neg_vals,
             ax=ax_triple[0],
             title=title[0],
             coords=(
@@ -416,12 +448,14 @@ def make_discrete_plots(tsne, discrete_exp, plot_genes, path,num):
             fig, ax_triple = plt.subplots(ncols=5, figsize=(15, 5))
             if pd.isnull(plot_gene[2]):
                 make_single_discrete_page(
+                    neg_vals,
                     fig=fig, ax_triple=ax_triple,
                     title=plot_gene[0],
                     gene=plot_gene[1]
                     )
             elif pd.isnull(plot_gene[3]):
                 make_pair_discrete_page(
+                    neg_vals,
                     fig=fig, ax_triple=ax_triple,
                     titles=plot_gene[0],
                     gene_1=plot_gene[1],
@@ -429,6 +463,7 @@ def make_discrete_plots(tsne, discrete_exp, plot_genes, path,num):
                     )
             elif pd.isnull(plot_gene[4]):
                 make_trips_discrete_page(
+                    neg_vals,
                     fig=fig, ax_triple=ax_triple,
                     titles=plot_gene[0],
                     gene_1=plot_gene[1],
@@ -437,6 +472,7 @@ def make_discrete_plots(tsne, discrete_exp, plot_genes, path,num):
                     )
             else:
                 make_quads_discrete_page(
+                    neg_vals,
                     fig=fig, ax_triple=ax_triple,
                     titles=plot_gene[0],
                     gene_1=plot_gene[1],
@@ -448,12 +484,14 @@ def make_discrete_plots(tsne, discrete_exp, plot_genes, path,num):
             fig, ax_triple = plt.subplots(ncols=4, figsize=(15, 5))
             if pd.isnull(plot_gene[2]):
                 make_single_discrete_page(
+                    neg_vals,
                     fig=fig, ax_triple=ax_triple,
                     title=plot_gene[0],
                     gene=plot_gene[1]
                     )
             elif pd.isnull(plot_gene[3]):
                 make_pair_discrete_page(
+                    neg_vals,
                     fig=fig, ax_triple=ax_triple,
                     titles=plot_gene[0],
                     gene_1=plot_gene[1],
@@ -461,6 +499,7 @@ def make_discrete_plots(tsne, discrete_exp, plot_genes, path,num):
                     )
             else:
                 make_trips_discrete_page(
+                    neg_vals,
                     fig=fig, ax_triple=ax_triple,
                     titles=plot_gene[0],
                     gene_1=plot_gene[1],
@@ -471,12 +510,14 @@ def make_discrete_plots(tsne, discrete_exp, plot_genes, path,num):
             fig, ax_triple = plt.subplots(ncols=3, figsize=(15, 5))
             if pd.isnull(plot_gene[2]):
                 make_single_discrete_page(
+                    neg_vals,
                     fig=fig, ax_triple=ax_triple,
                     title=plot_gene[0],
                     gene=plot_gene[1]
                     )
             else:
                 make_pair_discrete_page(
+                    neg_vals,
                     fig=fig, ax_triple=ax_triple,
                     titles=plot_gene[0],
                     gene_1=plot_gene[1],
@@ -503,8 +544,8 @@ def make_discrete_plots(tsne, discrete_exp, plot_genes, path,num):
         count=count+1
         plt.close(fig)
 
-def make_combined_plots(tsne, discrete_exp, marker_exp, plot_genes, path):
-    """Plots discrete alongside continuous expression to PDF.
+def make_combined_plots(tsne, discrete_exp, marker_exp, plot_genes, path, neg_vals):
+    """Plots discrete alongside continuous expression to PDFF.
 
     For each gene/gene pair listed in plot_genes, make two scatterplots: a plot
     showing discrete expression, and a plot showing expression on a color
@@ -525,12 +566,13 @@ def make_combined_plots(tsne, discrete_exp, marker_exp, plot_genes, path):
 
     :returns: Nothing.
     """
-    def make_pair_combined_page(fig, axes, titles, gene_1, gene_2):
+    def make_pair_combined_page(neg_vals, fig, axes, titles, gene_1, gene_2):
         """Make page with two pairs of plots for given genes."""
         disc_coords = tsne.merge(discrete_exp[[gene_1, gene_2]], on='cell')
         cont_coords = tsne.merge(marker_exp[[gene_1, gene_2]], on='cell')
         for (graph_index, z_label) in ((0, gene_1), (1, gene_2)):
             make_plot(
+                neg_vals,
                 ax=axes[graph_index][0], title=titles[graph_index],
                 coords=(
                     disc_coords['tSNE_1'].values,
@@ -540,20 +582,22 @@ def make_combined_plots(tsne, discrete_exp, marker_exp, plot_genes, path):
                 cmap=CMAP_DISCRETE
             )
             make_plot(
+                neg_vals,
                 ax=axes[graph_index][1], title=str(z_label),
                 coords=(
                     cont_coords['tSNE_1'].values,
                     cont_coords['tSNE_2'].values,
                     cont_coords[z_label].values
                 ),
-                cmap=CMAP_CONTINUOUS, draw_cbar=True
+                cmap=CMAP_CONTINUOUS, draw_cbar=True,
             )
 
-    def make_single_combined_page(fig, title, axes, gene):
+    def make_single_combined_page(neg_vals, fig, title, axes, gene):
         """Make page with single pair of plot of given gene."""
         disc_coords = tsne.merge(discrete_exp[[gene]], on='cell')
         cont_coords = tsne.merge(marker_exp[[gene]], on='cell')
         make_plot(
+            neg_vals,
             ax=axes[0], title=title,
             coords=(
                 disc_coords['tSNE_1'].values,
@@ -563,7 +607,10 @@ def make_combined_plots(tsne, discrete_exp, marker_exp, plot_genes, path):
             cmap=CMAP_DISCRETE
         )
         #if str(gene)[-8:] == 'NEGATION':
+
+        #This is, for some reason, plotting the absolute value of the scores
         make_plot(
+            neg_vals,
             ax=axes[1], title=str(gene),
             coords=(
                 cont_coords['tSNE_1'].values,
@@ -584,14 +631,14 @@ def make_combined_plots(tsne, discrete_exp, marker_exp, plot_genes, path):
         if pd.isnull(plot_gene[2]):
             fig, axes = plt.subplots(ncols=2, figsize=(10, 5))
             make_single_combined_page(
-                fig, plot_gene[0][0], axes, plot_gene[1]
+                neg_vals, fig, plot_gene[0][0], axes, plot_gene[1]
             )
         else:
             fig, axes = plt.subplots(
                 nrows=2, ncols=2, figsize=(10, 10)
             )
             make_pair_combined_page(
-                fig, axes, plot_gene[0], plot_gene[1], plot_gene[2]
+                neg_vals, fig, axes, plot_gene[0], plot_gene[1], plot_gene[2]
             )
         #pdf.savefig(fig)
         plt.savefig( path + '/' + 'rank_' + str(counter) + '.png')

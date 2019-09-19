@@ -6,7 +6,7 @@ def read(filename):
 
 setup(
     name = 'COMETSC',
-    version = '0.1.10',
+    version = '0.1.11',
     long_description=read('README.md'),
     packages = ['Comet'],
     install_requires=[
@@ -35,12 +35,12 @@ setup(
         'pytest==3.6.3',
         'python-dateutil==2.7.3',
         'pytz==2018.5',
-        'requests==2.20.0',
+        'requests==2.20.1',
         'scipy==1.1.0',
         'scikit-learn==0.21.0',
         'six==1.11.0',
         'traitlets==4.3.2',
-        'urllib3==1.23',
+        'urllib3==1.24.3',
         'xlmhg==2.4.9'],
     include_package_data=True,
     entry_points = {

@@ -339,6 +339,7 @@ def process(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_pa
     except Exception as err:
         print('discrete matrix construction failed')
         print(err)
+
     '''
     #For checking the sliding issue
     count = 0
@@ -361,7 +362,6 @@ def process(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_pa
     #Gives us the singleton TP/TNs for COI and for rest of clusters
     #COI is just a DF, rest of clusters are a dict of DFs
     (sing_tp_tn, other_sing_tp_tn) = hgmd.tp_tn(discrete_exp, cls_ser, cls, cluster_overall)
-
     ### Take out any genes with a true positive less than 15% from the expression matrix ###
     for gene in discrete_exp:
         if sing_tp_tn.set_index('gene_1').at[gene,'TP'] <= .15:
@@ -416,11 +416,13 @@ def process(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_pa
         print(str(end_trips-start_trips) + ' seconds')
 
     HG_start = time.time()
+    
     print('Running hypergeometric test on pairs...')
     pair, revised_indices = hgmd.pair_hg(
         gene_map, in_cls_count, pop_count,
         in_cls_product, total_product, upper_tri_indices, abbrev, heur_limit
     )
+    
     pair_q = hgmd.pairs_q(pair)
     
     HG_end = time.time()
@@ -448,24 +450,33 @@ def process(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_pa
 
     # Pair TP/TN FOR THIS CLUSTER
     print('Finding simple true positives/negatives for pairs...')
-    pair_tp_tn = hgmd.pair_tp_tn(
-        gene_map, in_cls_count, pop_count,
-        in_cls_product, total_product, upper_tri_indices, abbrev, revised_indices
-    )
+    try:
+        pair_tp_tn = hgmd.pair_tp_tn(
+            gene_map, in_cls_count, pop_count,
+            in_cls_product, total_product, upper_tri_indices, abbrev, revised_indices
+        )
+    except Exception as err:
+        print(err)
     #accumulates pair TP/TN vals for all other clusters
     ##NEW
-    other_pair_tp_tn = {}
-    for key in cluster_exp_matrices:
-        new_pair_tp_tn = hgmd.pair_tp_tn(
-            gene_map, cls_counts[key], pop_count,
-            cluster_exp_matrices[key], total_product, upper_tri_indices,
-            abbrev, revised_indices
-        )
-        other_pair_tp_tn[key] = new_pair_tp_tn
-        other_pair_tp_tn[key].set_index(['gene_1','gene_2'],inplace=True)
-    pair = pair\
-        .merge(pair_tp_tn, on=['gene_1', 'gene_2'], how='left')\
-        .merge(pair_q, on=['gene_1','gene_2'], how='left')
+    try:
+        other_pair_tp_tn = {}
+        for key in cluster_exp_matrices:
+            new_pair_tp_tn = hgmd.pair_tp_tn(
+                gene_map, cls_counts[key], pop_count,
+                cluster_exp_matrices[key], total_product, upper_tri_indices,
+                abbrev, revised_indices
+            )
+            other_pair_tp_tn[key] = new_pair_tp_tn
+            other_pair_tp_tn[key].set_index(['gene_1','gene_2'],inplace=True)
+    except:
+        pass
+    try:
+        pair = pair\
+          .merge(pair_tp_tn, on=['gene_1', 'gene_2'], how='left')\
+          .merge(pair_q, on=['gene_1','gene_2'], how='left')
+    except:
+        pass
         
     #Supplementary figure 2 code#
     '''
@@ -477,17 +488,26 @@ def process(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_pa
         print(other_sing_tp_tn[cl].loc[('LY6D')])
     time.sleep(10000)
     '''
-    pair_tp_tn.set_index(['gene_1','gene_2'],inplace=True)
+    try:
+        pair_tp_tn.set_index(['gene_1','gene_2'],inplace=True)
+    except:
+        pass
     sing_tp_tn.set_index(['gene_1'], inplace=True)
     rank_start = time.time()
     print('Finding NEW Rank')
-    ranked_pair,histogram = hgmd.ranker(pair,xlmhg,sing_tp_tn,other_sing_tp_tn,other_pair_tp_tn,cls_counts,in_cls_count,pop_count)
+    try:
+        ranked_pair,histogram = hgmd.ranker(pair,xlmhg,sing_tp_tn,other_sing_tp_tn,other_pair_tp_tn,cls_counts,in_cls_count,pop_count)
+    except Exception as err:
+        print(err)
     rank_end = time.time()
     print(str(rank_end - rank_start) + ' seconds')
     # Save TP/TN values to be used for non-cluster-specific things
     print('Pickling data for later...')
-    sing_tp_tn.to_pickle(pickle_path + 'sing_tp_tn_' + str(cls))
-    pair_tp_tn.to_pickle(pickle_path + 'pair_tp_tn_' + str(cls))
+    try:
+        sing_tp_tn.to_pickle(pickle_path + 'sing_tp_tn_' + str(cls))
+        pair_tp_tn.to_pickle(pickle_path + 'pair_tp_tn_' + str(cls))
+    except:
+        print('pickling failed')
     #trips_tp_tn.to_pickle(pickle_path + 'trips_tp_tn' + str(cls))
     print('Exporting cluster ' + str(cls) + ' output to CSV...')
     try:
@@ -560,11 +580,14 @@ def process(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_pa
         ['mHG_stat', 'TP', 'TN']
     ].reset_index().rename(index=str, columns={'gene_1': 'gene_1'})
     
-
-    ranked_print = ranked_pair.head(Trim)
-    ranked_print.to_csv(
-        csv_path + '/cluster_' + str(cls) + '_pair_final_ranking.csv'
-    )
+    try:
+        ranked_print = ranked_pair.head(Trim)
+        ranked_print.to_csv(
+            csv_path + '/cluster_' + str(cls) + '_pair_final_ranking.csv'
+        )
+    except:
+        print('pair file not generated, no pairs available')
+        ranked_pair = pd.DataFrame(data=0,index=[1,2,3],columns={'TP','TN','Plot','gene_1','gene_2','rank'})
     #Add trips data pages
     #does not currently do new rank scheme
     if K == 3:
@@ -780,6 +803,7 @@ def main():
             tenx=tenx,
             online=online,
             skipvis=skipvis)
+
     print("Generating complement data...")
     marker_exp = hgmd.add_complements(no_complement_marker_exp)
     #throw out vals that show up in expression matrix but not in cluster assignments
@@ -791,8 +815,6 @@ def main():
         #print(marker_exp.index.values.tolist().count(str(ind)))
         #print(marker_exp[index])
     #throw out gene rows that are duplicates and print out a message to user
-    
-            
     '''
     #throw out cls_ser vals not in marker_exp
     for index in cls_ser.index.values.tolist():
