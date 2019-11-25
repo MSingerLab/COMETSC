@@ -86,7 +86,7 @@ simply type 'deactivate' and you will return to your usual python.
 
 Your virtual environment should now be set up. If you run into any
 errors with the above steps, please consult the python documentation
-at their tutorial_ or reach out to us at cdelaney@ds.dfci.harvard.edu .
+at their tutorial_ or reach out to us at oshahid@ds.dfci.harvard.edu.
 	
 Usage
 ========================
@@ -263,7 +263,7 @@ consult the :doc:`Manual<usage>` to make sure the inputs are
 absolutely correct.
 
 Any further issues, please feel free to reach out to
-cdelaney@ds.dfci.harvard.edu with any questions, concerns, or
+oshahid@ds.dfci.harvard.edu with any questions, concerns, or
 troubleshooting problems.
     
 .. toctree::
