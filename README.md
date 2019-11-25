@@ -7,7 +7,9 @@
 
 ## About us
 
-  Maintained & Actively Developed by Conor Delaney (cdelaney@bcb.dfci.harvard.edu).
+  Actively maintained by Osmaan Shahid (oshahid@ds.dfci.harvard.edu).
+
+  Developed by Conor Delaney (cdelaney@bcb.dfci.harvard.edu).
 
   Prototyped by Aaron Yao-Smith (aty25@cornell.edu).
   
