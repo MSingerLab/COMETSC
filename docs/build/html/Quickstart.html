@@ -26,6 +26,7 @@
         <script type="text/javascript" src="_static/jquery.js"></script>
         <script type="text/javascript" src="_static/underscore.js"></script>
         <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -214,7 +215,7 @@ simply type ‘deactivate’ and you will return to your usual python.</p>
 </div>
 <p>Your virtual environment should now be set up. If you run into any
 errors with the above steps, please consult the python documentation
-at their <a class="reference external" href="https://virtualenv.pypa.io/en/latest/">tutorial</a> or reach out to us at <a class="reference external" href="mailto:cdelaney&#37;&#52;&#48;ds&#46;dfci&#46;harvard&#46;edu">cdelaney<span>&#64;</span>ds<span>&#46;</span>dfci<span>&#46;</span>harvard<span>&#46;</span>edu</a> .</p>
+at their <a class="reference external" href="https://virtualenv.pypa.io/en/latest/">tutorial</a> or reach out to us at <a class="reference external" href="mailto:oshahid&#37;&#52;&#48;ds&#46;dfci&#46;harvard&#46;edu">oshahid<span>&#64;</span>ds<span>&#46;</span>dfci<span>&#46;</span>harvard<span>&#46;</span>edu</a>.</p>
 </div>
 <div class="section" id="usage">
 <h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
@@ -226,7 +227,7 @@ See the <a class="reference internal" href="usage.html"><span class="doc">Manual
 <p>In this example, we have our data located in the current
 directory. <code class="docutils literal notranslate"><span class="pre">output/</span></code> is the directory where COMET’s output will be
 stored. To test your installation, you can download the following
-example inputs <a class="reference download internal" download="" href="_downloads/60641f9db59ac1a8e7ec38523c035cb5/example_ins.zip"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a> ! Copy them
+example inputs <a class="reference download internal" download="" href="_downloads/b9b54d5b86420dba57a65418e10d9882/example_ins.zip"><code class="xref download docutils literal notranslate"><span class="pre">here</span></code></a> ! Copy them
 to the directory of your choice and run the following command within
 the directory:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> Comet tabmarker.txt tabvis.txt tabcluster.txt output/
@@ -237,92 +238,127 @@ processing your data. If you are following along on your terminal and
 the run finishes, the install was a success!
 See some <a class="reference internal" href="Output.html"><span class="doc">examples</span></a> for details on
 what the outputs should look like.</p>
+<p>If, for example, you would like to skip the visualization step, simply
+add the “-skipvis” option as shown below:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> Comet tabmarker.txt tabvis.txt tabcluster.txt output/ -skipvis True
+</pre></div>
+</div>
+<p>All optional arguments for the tool are described below in detail.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Why are genes I don’t want showing up in my output?? -&gt; Our
-current marker list is inclusive rather than exclusive. If
+<p class="admonition-title">Note</p>
+<p>Why does my output contain genes that are not relevant
+(e.g. are secreted rather than cell-surface)??
+Our current marker list is inclusive rather than exclusive. If
 you find irrelevant non surface markers (e.g. secreted), you
 can manualy delete them from the list you used and upload the new list.</p>
 </div>
-<p>The optional statements are described as follows:</p>
+<p>The optional statements are available as follows:</p>
 <p>-h ()</p>
 <blockquote>
-<div>Help.</div></blockquote>
+<div><p>Help.</p>
+</div></blockquote>
 <p>-g (.txt)</p>
 <blockquote>
-<div>Optional gene list. Pointing -g to a text file with a list of
+<div><p>Optional gene list. Pointing -g to a text file with a list of
 genes will only run COMET with these genes. By default, it will
-run on all genes. Gene lists should be either comma delimited or line delimited.</div></blockquote>
+run on all genes. Gene lists should be either comma delimited or line delimited.</p>
+</div></blockquote>
 <p>-C (int)</p>
 <blockquote>
-<div>Multi-process option. This allows the user to choose how many
+<div><p>Multi-process option. This allows the user to choose how many
 clusters to run in parallel. This option is entirely dependent on
 your hardware, a good benchmark is the number of cores on your
 computer is a good choice for this option if you want things to
-run faster. Defaults to 1.</div></blockquote>
+run faster. Defaults to 1.</p>
+</div></blockquote>
 <p>-X (int)</p>
 <blockquote>
-<div>X-param of the XL-mHG test. Determines the percentage of ones
+<div><p>X-param of the XL-mHG test. Determines the percentage of ones
 above the threshold. See the <a class="reference internal" href="details.html"><span class="doc">statistical</span></a> section for more
-info. Should only be values between 0 and 1. Defaults to .15 (15%)</div></blockquote>
+info. Should only be values between 0 and 1. Defaults to .15 (15%)</p>
+</div></blockquote>
 <p>-L (int)</p>
 <blockquote>
-<div>L-param of the XL-mHG test. Determines the lowest threshold to
+<div><p>L-param of the XL-mHG test. Determines the lowest threshold to
 consider.
-See the <a class="reference internal" href="details.html"><span class="doc">statistical</span></a> section for more info. Defaults to 2 * size of cluster</div></blockquote>
+See the <a class="reference internal" href="details.html"><span class="doc">statistical</span></a> section for more info. Defaults to 2 * size of cluster</p>
+</div></blockquote>
 <p>-Abbrev (list)</p>
 <blockquote>
-<div>Abbrev is a variable to turn on the heuristics for a given
+<div><p>Abbrev is a variable to turn on the heuristics for a given
 run. After typing ‘-Abbrev’ , give a list of the number gene
 combinations you would like to be treated with the heuristic. For
 example, if you want to turn on the heuristic for 3- gene
 combinations only, input [3]. If you would like them for both 2-
-and 3- gene combinations, input [2,3]. Defaults to an empty list.</div></blockquote>
+and 3- gene combinations, input [2,3]. Defaults to an empty list.</p>
+</div></blockquote>
 <p>-K (int)</p>
 <blockquote>
-<div>The number of gene combinations you would like to consider. This
+<div><p>The number of gene combinations you would like to consider. This
 defaults to 2, can be at most 4 (for the time being). For example,
-if 4 is chosen, COMET will run 2, 3, and 4 gene combinations.</div></blockquote>
+if 4 is chosen, COMET will run 2, 3, and 4 gene combinations.</p>
+</div></blockquote>
 <p>-Down (int)</p>
 <blockquote>
-<div>For turning on downsampling. Will turn the data set into a random
+<div><p>For turning on downsampling. Will turn the data set into a random
 sampling of this many cells. Preserves cluster percentages by
 taking cells of each cluster at the same rate as the full
-set. Defaults to no downsampling.</div></blockquote>
+set. Defaults to no downsampling.</p>
+</div></blockquote>
 <p>-Trim (int)</p>
 <blockquote>
-<div>Integer input for determining the size of the output
+<div><p>Integer input for determining the size of the output
 files. Currently default is set to 2000 lines, but an increase here will
-give more combinations / singletons in the final ranked output files.</div></blockquote>
+give more combinations / singletons in the final ranked output files.</p>
+</div></blockquote>
 <p>-Count (Boolean)</p>
 <blockquote>
-<div>Will graph the log(expression+1). Leads to
+<div><p>Will graph the log(expression+1). Leads to
 nicer continuous expression plots when count data is used.
-Defaults to False, will plot the inputted expression as is.</div></blockquote>
+Defaults to False, will plot the inputted expression as is.</p>
+</div></blockquote>
 <p>-tenx (Boolean)</p>
 <blockquote>
-<div>For turning on tenx file integration. To submit a 10X format
+<div><p>For turning on tenx file integration. To submit a 10X format
 expression matrix, set this variable to True and in place of the
 expression matrix file in the command, use the folder containing
 the 10X data. Keep the default 10X names (e.g. barcodes.tsv,
-genes.tsv,matrix.mtx)</div></blockquote>
+genes.tsv,matrix.mtx)</p>
+</div></blockquote>
 <p>-online (Boolean)</p>
 <blockquote>
-<div>Online version of COMET, turning this on will produce a run as if
+<div><p>Online version of COMET, turning this on will produce a run as if
 it were submitted to the interface. This limits the run to looking
-at the 15 largest clusters.</div></blockquote>
+at the 15 largest clusters.</p>
+</div></blockquote>
+<p>-skipvis (Boolean)</p>
+<blockquote>
+<div><p>Setting this to true will skip the visualization section of the
+tool. Useful for speeding things up or if a user does not have
+coordinates to use. <strong>Please Note:</strong> The tool stilll expects an
+input for the visualization file, so just use anything that will
+fill that spot. Can be an empty text file or even one of the files
+already in use (e.g. cluster file), it will not be used.</p>
+</div></blockquote>
 </div>
 <div class="section" id="troubleshooting">
 <h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h1>
 <p>There has been a known issue with the compatibility of matplotlib with
-certain installations on Mac OS devices.
-The error looks as follows:
-<cite>RuntimeError: Python is not installed as a framework. The Mac OS X backend will not be able to function correctly if Python is not installed as a framework.</cite>
-To fix this issue, change the matplotlibrc ‘backend’ variable to ‘Agg’ as follows:
-In your root directory, there should be a directory called
-~/.matplotlib that can be edited to fix the problem. Maneuver to that directory, then create
-an empty file called ‘matplotlibrc’. If you add ‘backend: Agg’ to this file and save, the matplotlib install should be
-fixed and Comet should run normally. This issue is discussed on
+certain installations.
+The errors may look as follows:</p>
+<p><cite>RuntimeError: Python is not installed as a framework. The Mac OS X
+backend will not be able to function correctly if Python is not
+installed as a framework.</cite></p>
+<p><cite>ModuleNotFoundError: No module named ‘tkinter’</cite></p>
+<p>This issue occurs when the python environment is using the wrong
+version of the matplotlib backend variable, a setting used for a
+variety of different plotting schemes.</p>
+<p>To fix this issue, change the matplotlibrc ‘backend’ variable to ‘Agg’
+as follows:</p>
+<p>cd ~/.matplotlib</p>
+<p>Create an empty file called ‘matplotlibrc’ (e.g. vim matplorlibrc)</p>
+<p>Add ‘backend: Agg’ to this file and save (esc+:+w+q)</p>
+<p>The matplotlib install should be fixed and Comet should run normally. This issue is discussed on
 <a class="reference external" href="https://stackoverflow.com/questions/21784641/installation-issue-with-matplotlib-python">stackoverflow</a> as well. If you already have a matplotlibrc file in the
 site packages from downloading matplotlib, maneuvering to that file and changing
 the backend as described above may also fix the problem.</p>
@@ -331,7 +367,7 @@ input files. If a run is failing and you cannot figure out why, please
 consult the <a class="reference internal" href="usage.html"><span class="doc">Manual</span></a> to make sure the inputs are
 absolutely correct.</p>
 <p>Any further issues, please feel free to reach out to
-<a class="reference external" href="mailto:cdelaney&#37;&#52;&#48;ds&#46;dfci&#46;harvard&#46;edu">cdelaney<span>&#64;</span>ds<span>&#46;</span>dfci<span>&#46;</span>harvard<span>&#46;</span>edu</a> with any questions, concerns, or
+<a class="reference external" href="mailto:oshahid&#37;&#52;&#48;ds&#46;dfci&#46;harvard&#46;edu">oshahid<span>&#64;</span>ds<span>&#46;</span>dfci<span>&#46;</span>harvard<span>&#46;</span>edu</a> with any questions, concerns, or
 troubleshooting problems.</p>
 <div class="toctree-wrapper compound">
 </div>

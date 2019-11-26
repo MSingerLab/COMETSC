@@ -2,8 +2,8 @@
 
 .. _Github: https://github.com/MSingerLab/COMETSC
 
-.. _BioArxiv: https://www.biorxiv.org/content/10.1101/655753v1
-
+.. _Molecular Systems Biology: https://www.embopress.org/doi/full/10.15252/msb.20199005
+ 
 .. _website: http://www.cometsc.com/index
 
 .. |comet| image:: _static/COMET.png
@@ -16,7 +16,7 @@
 
 Official documentation for COMET.
 
-Check out the paper on the BioArxiv_!
+Check out the paper on `Molecular Systems Biology`_!
 
 Start with :doc:`Quickstart<quickstart>`, or jump right into the :doc:`User Manual<manual>`.
 
@@ -26,7 +26,7 @@ Find our code on Github_.
 
 
 If you find COMET to be useful towards your research, please consider
-citing our paper on the BioArxiv_ !
+citing our paper on `Molecular Systems Biology`_!
 
 .. toctree::
    :maxdepth: 2

@@ -26,6 +26,7 @@
         <script type="text/javascript" src="_static/jquery.js"></script>
         <script type="text/javascript" src="_static/underscore.js"></script>
         <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -167,19 +168,20 @@
 <div class="contents local topic" id="per-cluster-program-flow">
 <p class="topic-title first">Per-cluster program flow</p>
 <ul class="simple">
-<li><a class="reference internal" href="#read-in-data-from-txt" id="id1">1. Read in data from TXT.</a></li>
-<li><a class="reference internal" href="#run-xl-mhg-tests-on-singletons" id="id2">2. Run XL-mHG tests on singletons.</a></li>
-<li><a class="reference internal" href="#slide-xl-mhg-cutoff-values" id="id3">3. ‘Slide’ XL-mHG cutoff values.</a></li>
-<li><a class="reference internal" href="#generate-discrete-expression-matrix-using-cutoffs" id="id4">4. Generate discrete expression matrix using cutoffs.</a></li>
-<li><a class="reference internal" href="#find-cluster-and-population-pair-expression-counts" id="id5">5. Find cluster and population pair expression counts.</a><ul>
-<li><a class="reference internal" href="#finding-the-parameters-for-gene-pairs" id="id6">Finding the parameters for gene pairs</a></li>
-<li><a class="reference internal" href="#gene-combinations" id="id7">3+ gene combinations</a></li>
+<li><p><a class="reference internal" href="#read-in-data-from-txt" id="id1">1. Read in data from TXT.</a></p></li>
+<li><p><a class="reference internal" href="#run-xl-mhg-tests-on-singletons" id="id2">2. Run XL-mHG tests on singletons.</a></p></li>
+<li><p><a class="reference internal" href="#slide-xl-mhg-cutoff-values" id="id3">3. ‘Slide’ XL-mHG cutoff values.</a></p></li>
+<li><p><a class="reference internal" href="#generate-discrete-expression-matrix-using-cutoffs" id="id4">4. Generate discrete expression matrix using cutoffs.</a></p></li>
+<li><p><a class="reference internal" href="#find-cluster-and-population-pair-expression-counts" id="id5">5. Find cluster and population pair expression counts.</a></p>
+<ul>
+<li><p><a class="reference internal" href="#finding-the-parameters-for-gene-pairs" id="id6">Finding the parameters for gene pairs</a></p></li>
+<li><p><a class="reference internal" href="#gene-combinations" id="id7">3+ gene combinations</a></p></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#run-hypergeometric-test-on-pairs-using-counts" id="id8">6. Run hypergeometric test on pairs using counts.</a></li>
-<li><a class="reference internal" href="#calculate-true-positive-negative" id="id9">7. Calculate true positive/negative.</a></li>
-<li><a class="reference internal" href="#export-statistical-results" id="id10">8. Export statistical results.</a></li>
-<li><a class="reference internal" href="#generate-and-export-visualizations" id="id11">9. Generate and export visualizations.</a></li>
+<li><p><a class="reference internal" href="#run-hypergeometric-test-on-pairs-using-counts" id="id8">6. Run hypergeometric test on pairs using counts.</a></p></li>
+<li><p><a class="reference internal" href="#calculate-true-positive-negative" id="id9">7. Calculate true positive/negative.</a></p></li>
+<li><p><a class="reference internal" href="#export-statistical-results" id="id10">8. Export statistical results.</a></p></li>
+<li><p><a class="reference internal" href="#generate-and-export-visualizations" id="id11">9. Generate and export visualizations.</a></p></li>
 </ul>
 </div>
 <p><img alt="flow" src="_images/flow.jpg" /></p>
@@ -190,9 +192,9 @@
 <p>User-specified data is read in via TXT format (currently, requiring tab delimiters.) See <a class="reference internal" href="usage.html"><span class="doc">Usage</span></a> for details of the format of this data.</p>
 <p>There are three components:</p>
 <ul class="simple">
-<li>Per-cell gene expression values. Each gene must be normalized over cells.</li>
-<li>Cluster membership by cell.</li>
-<li>Per-cell 2-D visualization coordinates, for plotting.</li>
+<li><p>Per-cell gene expression values. Each gene must be normalized over cells.</p></li>
+<li><p>Cluster membership by cell.</p></li>
+<li><p>Per-cell 2-D visualization coordinates, for plotting.</p></li>
 </ul>
 <p>In order to test ‘complement’ genes (i.e. expressed as the absence of a gene rather than the presence of a gene), COMET creates a new complement gene for each gene. These complement genes are treated exactly the same as normal genes, but their expression values are the negative of the expression values of their analogous gene. This allows COMET to find separate mHG cutoff values for genes and their complements.</p>
 </div>
@@ -248,22 +250,22 @@ These parameters are usually referred to as <strong>k</strong>, <strong>s</stron
 <p>COMET’s statistical results are exported to multiple CSV files per cluster: some including statistical values for exclusively singletons, and some including combinations. Rows are genes or gene combinations, columns are values associated with that gene/combination.</p>
 <p>The columns of the statistical data are:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">gene</span></code>: the name of the gene.</li>
-<li><code class="docutils literal notranslate"><span class="pre">HG_stat</span></code>: the hypergeometric test statistic. Genes are ranked using this value.</li>
-<li><code class="docutils literal notranslate"><span class="pre">mHG_pval</span></code>: the statistical significance of the cutoff which the XL-mHG test has chosen.</li>
-<li><code class="docutils literal notranslate"><span class="pre">mHG_cutoff_index</span></code>: the index which the XL-mHG has chosen, after sliding.</li>
-<li><code class="docutils literal notranslate"><span class="pre">mHG_cutoff_value</span></code>: the gene expression cutoff value corresponding to the chosen index.</li>
-<li><code class="docutils literal notranslate"><span class="pre">t_stat</span></code>: the t-test statistic.</li>
-<li><code class="docutils literal notranslate"><span class="pre">t_pval</span></code>: the t-test p significance value corresponding to the test statistic.</li>
-<li><code class="docutils literal notranslate"><span class="pre">TP</span></code>: the true positive rate.</li>
-<li><code class="docutils literal notranslate"><span class="pre">TN</span></code>: the true negative rate.</li>
-<li><code class="docutils literal notranslate"><span class="pre">FoldChange</span></code>: the log base 2 fold change of a single gene from the cluster of interest compared to the rest of the cells.</li>
-<li><code class="docutils literal notranslate"><span class="pre">init</span> <span class="pre">rank</span></code>: sequential ranking based on <code class="docutils literal notranslate"><span class="pre">HG_stat</span></code>, where lower <code class="docutils literal notranslate"><span class="pre">HG_stat</span></code> is better ranking. No two genes are ranked the same; those with identical hypergeometric statistic values are ranked arbitrarily relative to one another.</li>
-<li><code class="docutils literal notranslate"><span class="pre">CCS</span></code>: Cluster Clear Score. This gives us a statistic for the clearing out of other clusters with the addition of the second gene in comparison with the single gene case. The ‘lead gene’ is whichever of the pair has the smallest p-value, then we compute weighted True Negative deltas across the other clusters for the lead gene and the pair. This is only computed for a certain number of the top performing ‘init rank’ gene combinations.</li>
-<li><code class="docutils literal notranslate"><span class="pre">rank</span></code>: Final rank. Takes the average of the the init rank and the CCS to determine which gene combinations are the best performing in both tests.</li>
-<li><code class="docutils literal notranslate"><span class="pre">Plot</span></code>: Determines whether a gene is plotted (1) or not (0). The purpose is to only graph the top ten of a given gene appearance to avoid very well performing genes from taking over the entire results page.</li>
-<li><code class="docutils literal notranslate"><span class="pre">gene</span></code> is replaced by <code class="docutils literal notranslate"><span class="pre">gene_1</span></code> and <code class="docutils literal notranslate"><span class="pre">gene_2</span></code> (combinations of 3+ genes are unimplemented as of yet).</li>
-<li><code class="docutils literal notranslate"><span class="pre">mHG_pval</span></code>, <code class="docutils literal notranslate"><span class="pre">mHG_cutoff_index</span></code>, <code class="docutils literal notranslate"><span class="pre">mHG_cutoff_value</span></code>, <code class="docutils literal notranslate"><span class="pre">t_stat</span></code>, and <code class="docutils literal notranslate"><span class="pre">t_pval</span></code> are omitted, since they are irrelevant to non-singletons.</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gene</span></code>: the name of the gene.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HG_stat</span></code>: the hypergeometric test statistic. Genes are ranked using this value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mHG_pval</span></code>: the statistical significance of the cutoff which the XL-mHG test has chosen.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mHG_cutoff_index</span></code>: the index which the XL-mHG has chosen, after sliding.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mHG_cutoff_value</span></code>: the gene expression cutoff value corresponding to the chosen index.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">t_stat</span></code>: the t-test statistic.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">t_pval</span></code>: the t-test p significance value corresponding to the test statistic.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TP</span></code>: the true positive rate.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TN</span></code>: the true negative rate.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FoldChange</span></code>: the log base 2 fold change of a single gene from the cluster of interest compared to the rest of the cells.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">init</span> <span class="pre">rank</span></code>: sequential ranking based on <code class="docutils literal notranslate"><span class="pre">HG_stat</span></code>, where lower <code class="docutils literal notranslate"><span class="pre">HG_stat</span></code> is better ranking. No two genes are ranked the same; those with identical hypergeometric statistic values are ranked arbitrarily relative to one another.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CCS</span></code>: Cluster Clear Score. This gives us a statistic for the clearing out of other clusters with the addition of the second gene in comparison with the single gene case. The ‘lead gene’ is whichever of the pair has the smallest p-value, then we compute weighted True Negative deltas across the other clusters for the lead gene and the pair. This is only computed for a certain number of the top performing ‘init rank’ gene combinations.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rank</span></code>: Final rank. Takes the average of the the init rank and the CCS to determine which gene combinations are the best performing in both tests.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Plot</span></code>: Determines whether a gene is plotted (1) or not (0). The purpose is to only graph the top ten of a given gene appearance to avoid very well performing genes from taking over the entire results page.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gene</span></code> is replaced by <code class="docutils literal notranslate"><span class="pre">gene_1</span></code> and <code class="docutils literal notranslate"><span class="pre">gene_2</span></code> (combinations of 3+ genes are unimplemented as of yet).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mHG_pval</span></code>, <code class="docutils literal notranslate"><span class="pre">mHG_cutoff_index</span></code>, <code class="docutils literal notranslate"><span class="pre">mHG_cutoff_value</span></code>, <code class="docutils literal notranslate"><span class="pre">t_stat</span></code>, and <code class="docutils literal notranslate"><span class="pre">t_pval</span></code> are omitted, since they are irrelevant to non-singletons.</p></li>
 </ul>
 </div>
 <div class="section" id="generate-and-export-visualizations">
@@ -271,12 +273,12 @@ These parameters are usually referred to as <strong>k</strong>, <strong>s</stron
 <p>For each cluster, COMET generates several PNG file folders containing visualizations of the statistical results. Each folder’s name is prefixed by the cluster name, and includes visuals for only the first few highest ranked genes/combinations. The data files are described in the Output section.</p>
 <p>The folders are:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">(cluster)_pairs_as_singletons</span></code>: compares discrete expression and continuous expression for each gene in a combination on a t-SNE plot.</li>
-<li><code class="docutils literal notranslate"><span class="pre">(cluster)_discrete_pairs</span></code>: compares discrete expression of a gene combination with that of its components.</li>
-<li><code class="docutils literal notranslate"><span class="pre">(cluster)_pair_TP_TN</span></code>: plots true positive/negative rates of each gene.</li>
-<li><code class="docutils literal notranslate"><span class="pre">(cluster)_singleton</span></code>: same as the <code class="docutils literal notranslate"><span class="pre">combined</span></code> plot, but includes only singletons.</li>
-<li><code class="docutils literal notranslate"><span class="pre">(cluster)_singleton_TP_TN</span></code>: same as the <code class="docutils literal notranslate"><span class="pre">TP_TN</span></code> plot, but includes only singletons.</li>
-<li><code class="docutils literal notranslate"><span class="pre">(cluster)_discrete_trios</span></code>: compares discrete expression of a gene combination with that of its components, but there are three.</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">(cluster)_pairs_as_singletons</span></code>: compares discrete expression and continuous expression for each gene in a combination on a t-SNE plot.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">(cluster)_discrete_pairs</span></code>: compares discrete expression of a gene combination with that of its components.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">(cluster)_pair_TP_TN</span></code>: plots true positive/negative rates of each gene.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">(cluster)_singleton</span></code>: same as the <code class="docutils literal notranslate"><span class="pre">combined</span></code> plot, but includes only singletons.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">(cluster)_singleton_TP_TN</span></code>: same as the <code class="docutils literal notranslate"><span class="pre">TP_TN</span></code> plot, but includes only singletons.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">(cluster)_discrete_trios</span></code>: compares discrete expression of a gene combination with that of its components, but there are three.</p></li>
 </ul>
 <div class="toctree-wrapper compound">
 </div>
