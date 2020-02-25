@@ -357,15 +357,14 @@ def process(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_pa
     #print(marker_exp['1600029D21Rik'].sort_values(ascending=False).head(160))
     #time.sleep(100000)
     '''
-    discrete_exp_full = discrete_exp.copy()
+    if skipvis == 0:
+        discrete_exp_full = discrete_exp.copy()
     print('Finding simple true positives/negatives for singletons...')
     #Gives us the singleton TP/TNs for COI and for rest of clusters
     #COI is just a DF, rest of clusters are a dict of DFs
     (sing_tp_tn, other_sing_tp_tn) = hgmd.tp_tn(discrete_exp, cls_ser, cls, cluster_overall)
     ### Take out any genes with a true positive less than 15% from the expression matrix ###
-    for gene in discrete_exp:
-        if sing_tp_tn.set_index('gene_1').at[gene,'TP'] <= .15:
-            discrete_exp.drop(labels=gene,axis=1,inplace=True)
+    discrete_exp = discrete_exp[ sing_tp_tn['gene_1'][ sing_tp_tn['TP'] > .15 ].values ]
     ########################################################################################
     ###########
     #OLD HEURISTICS
@@ -492,7 +491,7 @@ def process(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_pa
         pair_tp_tn.set_index(['gene_1','gene_2'],inplace=True)
     except:
         pass
-    sing_tp_tn.set_index(['gene_1'], inplace=True)
+#    sing_tp_tn.set_index(['gene_1'], inplace=True)
     rank_start = time.time()
     print('Finding NEW Rank')
     try:
@@ -524,7 +523,7 @@ def process(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_pa
     sing_output.sort_values(by='gene_1',ascending=True).to_csv(
         csv_path + '/cluster_' + str(cls) + '_singleton_full_unranked.csv'
     )
-        
+
     sing_output = sing_output.loc[sing_output['TP'] >= .15]
 
     for index, row in sing_output.iterrows():
@@ -807,8 +806,9 @@ def main():
     print("Generating complement data...")
     marker_exp = hgmd.add_complements(no_complement_marker_exp)
     #throw out vals that show up in expression matrix but not in cluster assignments
+    cls_ser_idx = set(cls_ser.index.values.tolist())
     for ind,row in marker_exp.iterrows():
-        if ind in cls_ser.index.values.tolist():
+        if ind in cls_ser_idx:
             continue
         else:
             marker_exp.drop(ind, inplace=True)
@@ -865,24 +865,28 @@ def main():
     # if core number is bigger than number of clusters, set it equal to number of clusters
     if cores > len(clusters):
         cores = len(clusters)
-    #below loops allow for splitting the job based on core choice
-    group_num  = math.ceil((len(clusters) / cores ))
-    for element in range(group_num):
-        new_clusters = clusters[:cores]
-        print(new_clusters)
-        jobs = []
-        #this loop spawns the workers and runs the code for each assigned.
-        #workers assigned based on the new_clusters list which is the old clusters
-        #split up based on core number e.g.
-        #clusters = [1 2 3 4 5 6] & cores = 4 --> new_clusters = [1 2 3 4], new_clusters = [5 6]
-        for cls in new_clusters:
-            p = multiprocessing.Process(target=process,
-                args=(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_path,pickle_path,cluster_number,K,Abbrev,cluster_overall,Trim,count_data,skipvis))
-            jobs.append(p)
-            p.start()
-        p.join()
-        new_clusters = []
-        clusters = clusters[cores:len(clusters)]
+    if cores == 1:
+        for cls in clusters:
+            process(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_path,pickle_path,cluster_number,K,Abbrev,cluster_overall,Trim,count_data,skipvis)
+    else:
+        #below loops allow for splitting the job based on core choice
+        group_num  = math.ceil((len(clusters) / cores ))
+        for element in range(group_num):
+            new_clusters = clusters[:cores]
+            print(new_clusters)
+            jobs = []
+            #this loop spawns the workers and runs the code for each assigned.
+            #workers assigned based on the new_clusters list which is the old clusters
+            #split up based on core number e.g.
+            #clusters = [1 2 3 4 5 6] & cores = 4 --> new_clusters = [1 2 3 4], new_clusters = [5 6]
+            for cls in new_clusters:
+                p = multiprocessing.Process(target=process,
+                    args=(cls,X,L,plot_pages,cls_ser,tsne,marker_exp,gene_file,csv_path,vis_path,pickle_path,cluster_number,K,Abbrev,cluster_overall,Trim,count_data,skipvis))
+                jobs.append(p)
+                p.start()
+            p.join()
+            new_clusters = []
+            clusters = clusters[cores:len(clusters)]
 
     end_time = time.time()
 
