@@ -803,26 +803,22 @@ def main():
             online=online,
             skipvis=skipvis)
 
-    print("Generating complement data...")
-    marker_exp = hgmd.add_complements(no_complement_marker_exp)
     #throw out vals that show up in expression matrix but not in cluster assignments
     cls_ser_idx = set(cls_ser.index.values.tolist())
-    for ind,row in marker_exp.iterrows():
-        if ind in cls_ser_idx:
-            continue
-        else:
-            marker_exp.drop(ind, inplace=True)
-        #print(marker_exp.index.values.tolist().count(str(ind)))
-        #print(marker_exp[index])
+    no_complement_marker_exp.drop([ind for ind,row in no_complement_marker_exp.iterrows() if ind not in cls_ser_idx], inplace=True)
+
     #throw out gene rows that are duplicates and print out a message to user
     '''
     #throw out cls_ser vals not in marker_exp
     for index in cls_ser.index.values.tolist():
-        if index in marker_exp.columns:
+        if index in no_complement_marker_exp.columns:
             continue
         else:
             cls_ser.drop(index,inplace=True)
     '''
+
+    print("Generating complement data...")
+    marker_exp = hgmd.add_complements(no_complement_marker_exp)
     marker_exp.sort_values(by='cell',inplace=True)
     cls_ser.sort_index(inplace=True)
 
