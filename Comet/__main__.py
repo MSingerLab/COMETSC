@@ -97,7 +97,7 @@ def read_data(cls_path, tsne_path, marker_path, gene_path, D, tenx, online,skipv
     cls_ser = pd.read_csv(
         cls_path, sep='\t', index_col=0, names=['cell', 'cluster'], squeeze=True
     )
-    if np.isnan(cls_ser[0]):
+    if ',' in cls_ser.index[1]:
         cls_ser = pd.read_csv(
         cls_path, sep=',', index_col=0, names=['cell', 'cluster'], squeeze=True )
 
