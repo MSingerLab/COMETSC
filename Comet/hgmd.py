@@ -24,6 +24,38 @@ from . import qvalue
 # Used for comparision of marker expression values.
 FLOAT_PRECISION = 0.001
 
+# the following function was taken from SciPy and modified to minimize memory consumption
+# Copyright © 2001, 2002 Enthought, Inc.; Copyright © 2003-2019 SciPy Developers.
+from collections import namedtuple
+RanksumsResult = namedtuple('RanksumsResult', ('statistic', 'pvalue'))
+def ranksums(x, y):
+    x, y = map(np.asarray, (x, y))
+    n1 = len(x)
+    n2 = len(y)
+    alldata = np.concatenate((x, y))
+
+    alldata = np.ravel(np.asarray(alldata))
+    sorter = np.argsort(alldata, kind='quicksort')
+
+    inv = np.empty(sorter.size, dtype=np.intp)
+    inv[sorter] = np.arange(sorter.size, dtype=np.intp)
+
+    alldata = alldata[sorter]
+    sorter = None
+    alldata = np.r_[True, alldata[1:] != alldata[:-1]]
+    dense = alldata.cumsum()[inv]
+
+    count = np.r_[np.nonzero(alldata)[0], len(alldata)]
+    ranked = .5 * (count[dense] + count[dense - 1] + 1)
+
+    x = ranked[:n1]
+    s = np.sum(x, axis=0)
+    expected = n1 * (n1+n2+1) / 2.0
+    z = (s - expected) / np.sqrt(n1*n2*(n1+n2+1)/12.0)
+    prob = 2 * ss.distributions.norm.sf(abs(z))
+
+    return RanksumsResult(z, prob)
+
 def add_complements(marker_exp):
     """Adds columns representing gene complement to a gene expression matrix.
 
@@ -224,7 +256,7 @@ def batch_stats_extended(marker_exp, c_list, coi):
     )
     ws = marker_exp.apply(
         lambda col:
-        ss.ranksums(
+        ranksums(
             col[c_list == coi],
             col[c_list != coi]
         )
@@ -263,7 +295,7 @@ def batch_stats(marker_exp, c_list, coi):
     :rtype: pandas.DataFrame
     """
     ttest_result = ss.ttest_ind( marker_exp[c_list == coi], marker_exp[c_list != coi], equal_var=False)
-    ws_result    = ss.ranksums(  marker_exp[c_list == coi], marker_exp[c_list != coi])
+    ws_result    = ranksums(  marker_exp[c_list == coi], marker_exp[c_list != coi])
     output = pd.DataFrame({'t_stat':ttest_result.statistic,
                            't_pval':ttest_result.pvalue,
                            'ws_stat':ws_result.statistic,
