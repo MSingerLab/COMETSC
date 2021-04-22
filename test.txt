@@ -1,1 +1,0 @@
-This push to GitHub will test the integration webhook with Readthedocs.
