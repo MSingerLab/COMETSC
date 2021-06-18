@@ -27,5 +27,5 @@ scipy==1.1.0
 scikit-learn==0.21.0
 six==1.11.0
 traitlets==4.3.2
-urllib3==1.26.5
+urllib3==1.24.3
 xlmhg==2.4.9
