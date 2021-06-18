@@ -24,6 +24,37 @@ from . import qvalue
 # Used for comparision of marker expression values.
 FLOAT_PRECISION = 0.001
 
+# the following function was taken from SciPy and modified to minimize memory consumption
+# Copyright © 2001, 2002 Enthought, Inc.; Copyright © 2003-2019 SciPy Developers.
+from collections import namedtuple
+RanksumsResult = namedtuple('RanksumsResult', ('statistic', 'pvalue'))
+def ranksums(x, y):
+    x, y = map(np.asarray, (x, y))
+    n1 = len(x)
+    n2 = len(y)
+    alldata = np.concatenate((x, y))
+
+    alldata = np.ravel(np.asarray(alldata))
+    sorter = np.argsort(alldata, kind='quicksort')
+
+    inv = np.empty(sorter.size, dtype=np.intp)
+    inv[sorter] = np.arange(sorter.size, dtype=np.intp)
+
+    alldata = alldata[sorter]
+    sorter = None
+    alldata = np.r_[True, alldata[1:] != alldata[:-1]]
+    dense = alldata.cumsum()[inv]
+
+    count = np.r_[np.nonzero(alldata)[0], len(alldata)]
+    ranked = .5 * (count[dense] + count[dense - 1] + 1)
+
+    x = ranked[:n1]
+    s = np.sum(x, axis=0)
+    expected = n1 * (n1+n2+1) / 2.0
+    z = (s - expected) / np.sqrt(n1*n2*(n1+n2+1)/12.0)
+    prob = 2 * ss.distributions.norm.sf(abs(z))
+
+    return RanksumsResult(z, prob)
 
 def add_complements(marker_exp):
     """Adds columns representing gene complement to a gene expression matrix.
@@ -47,14 +78,10 @@ def add_complements(marker_exp):
 
     :rtype: pandas.DataFrame
     """
-    for gene in marker_exp.columns:
-        #marker_exp[gene + '_negation'] = 1/(1+marker_exp[gene])
-        marker_exp[gene + '_negation'] = -marker_exp[gene]
-    '''
-    for gene in marker_exp.columns:
-        marker_exp[gene + '_c'] = max(marker_exp[gene]) - marker_exp[gene]
-    '''
-    return marker_exp
+    negation = -marker_exp
+    negation.columns = negation.columns + '_negation'
+    return pd.concat((marker_exp,negation), axis=1)
+
 
 
 def batch_xlmhg(marker_exp, c_list, coi, X=None, L=None):
@@ -229,7 +256,7 @@ def batch_stats_extended(marker_exp, c_list, coi):
     )
     ws = marker_exp.apply(
         lambda col:
-        ss.ranksums(
+        ranksums(
             col[c_list == coi],
             col[c_list != coi]
         )
@@ -267,34 +294,14 @@ def batch_stats(marker_exp, c_list, coi):
 
     :rtype: pandas.DataFrame
     """
+    ttest_result = ss.ttest_ind( marker_exp[c_list == coi], marker_exp[c_list != coi], equal_var=False)
+    ws_result    = ranksums(  marker_exp[c_list == coi], marker_exp[c_list != coi])
+    output = pd.DataFrame({'t_stat':ttest_result.statistic,
+                           't_pval':ttest_result.pvalue,
+                           'ws_stat':ws_result.statistic,
+                           'ws_pval':ws_result.pvalue}, index=marker_exp.columns)
+    output.index.name = 'gene_1'
         
-    t = marker_exp.apply(
-        lambda col:
-        ss.ttest_ind(
-            col[c_list == coi],
-            col[c_list != coi],
-            equal_var=False
-        )
-    )
-    ws = marker_exp.apply(
-        lambda col:
-        ss.ranksums(
-            col[c_list == coi],
-            col[c_list != coi]
-        )
-    )
-    output = pd.DataFrame()
-    output['gene_1'] = t.index
-    #output['gene_1'] = ws.index
-    output[['t_stat', 't_pval']] = pd.DataFrame(
-        t.values.tolist(),
-        columns=['t_stat', 't_pval']
-    )
-    output[['w_stat', 'w_pval']] = pd.DataFrame(
-        ws.values.tolist(),
-        columns=['w_stat', 'w_pval']
-    )
-
     return output
 
 
@@ -311,8 +318,10 @@ def batch_fold_change(marker_exp, c_list, coi):
     """
     
     def fold_change(col,c_list,coi):
-        mean0 = np.mean(col[c_list == coi]) + .000001
-        mean1 = np.mean(col[c_list != coi]) + .000001
+        FC = col.groupby(c_list==coi).mean()
+        mean0 = FC[True] + .000001
+        mean1 = FC[False] + .000001
+
         if mean0 == 0:
             val = math.nan
             return val
@@ -329,10 +338,7 @@ def batch_fold_change(marker_exp, c_list, coi):
         lambda col:
         (math.log(fold_change(col,c_list,coi),2))
         )
-    fca = marker_exp.apply(
-        lambda col:
-        abs(math.log(fold_change(col,c_list,coi),2))
-        )
+    fca = abs(fc)
     output = pd.DataFrame()
     output['gene_1'] = fc.index
     output[['Log2FoldChange']] = pd.DataFrame(
@@ -469,9 +475,8 @@ def discrete_exp(marker_exp, cutoff_val,abbrev,xlmhg):
 
     :rtype: pandas.DataFrame
     """
-    output = pd.DataFrame()
-    for gene in marker_exp.columns:
-        output[gene] = (marker_exp[gene] > cutoff_val[gene]) * 1
+    output = (marker_exp>cutoff_val).astype('int32')
+
     ab = '2'
     abb = '3'
     if ab in abbrev or abb in abbrev:
@@ -507,38 +512,17 @@ def tp_tn(discrete_exp, c_list, coi, cluster_overall):
     for clstrs in cluster_overall:
         if clstrs == coi:
             continue
-        mem_list = (c_list == (clstrs)) * 1
-        tp_tn =discrete_exp.apply(
-            lambda col: (
-                np.dot(mem_list, col.values) / np.sum(mem_list),
-                np.dot(1 - mem_list, 1 - col.values) / np.sum(1 - mem_list),
-            )
-        )
-        sing_cluster_exp_matrices[clstrs] = pd.DataFrame()
-        sing_cluster_exp_matrices[clstrs]['gene_1'] = tp_tn.index
-        sing_cluster_exp_matrices[clstrs][['TP', 'TN']] = pd.DataFrame(
-            tp_tn.values.tolist(),
-            columns=['TP', 'TN']
-        )
-        sing_cluster_exp_matrices[clstrs].set_index('gene_1',inplace=True)
-        
+        sing_cluster_exp_matrices[clstrs] = discrete_exp.groupby(c_list == clstrs).mean()
+        sing_cluster_exp_matrices[clstrs] = sing_cluster_exp_matrices[clstrs].T.rename(columns={True:'TP',False:'TN'})
+        sing_cluster_exp_matrices[clstrs]['TN'] = 1 - sing_cluster_exp_matrices[clstrs]['TN']
+        sing_cluster_exp_matrices[clstrs].index.name = 'gene_1'
 
-    #does our cluster of interest
-    # * 1 converts to integer
-    mem_list = (c_list == coi) * 1
-    
-    tp_tn = discrete_exp.apply(
-        lambda col: (
-            np.dot(mem_list, col.values) / np.sum(mem_list),
-            np.dot(1 - mem_list, 1 - col.values) / np.sum(1 - mem_list)
-        )
-    )
-    output = pd.DataFrame()
-    output['gene_1'] = tp_tn.index
-    output[['TP', 'TN']] = pd.DataFrame(
-        tp_tn.values.tolist(),
-        columns=['TP', 'TN']
-    )
+    output = discrete_exp.groupby(c_list == coi).mean().T.rename(columns={True:'TP',False:'TN'})
+    output['TN'] = 1 - output['TN']
+    output.index.name = 'gene_1'
+    output.reset_index(inplace=True)
+    output.rename_axis('gene_1')
+
     #outputs a DF for COI and a dict of DF's for rest
     return output, sing_cluster_exp_matrices
 
