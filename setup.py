@@ -40,7 +40,7 @@ setup(
         'scikit-learn==0.21.0',
         'six==1.11.0',
         'traitlets==4.3.2',
-        'urllib3==1.24.3',
+        'urllib3==1.26.5',
         'xlmhg==2.4.9'],
     include_package_data=True,
     entry_points = {
