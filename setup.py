@@ -6,7 +6,7 @@ def read(filename):
 
 setup(
     name = 'COMETSC',
-    version = '0.1.12',
+    version = '0.1.13',
     long_description=read('README.md'),
     packages = ['Comet'],
     install_requires=[
