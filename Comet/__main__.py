@@ -5,6 +5,8 @@ import re
 
 import pandas as pd
 import numpy as np
+import scanpy as sc
+import anndata
 
 from . import hgmd
 from . import visualize as vis
@@ -89,57 +91,102 @@ def init_parser(parser):
     return parser
 
 
-def read_data(cls_path, tsne_path, marker_path, gene_path, D, tenx, online,skipvis):
+def read_data(cls_path, tsne_path, marker_path, gene_path, D, tenx, online, skipvis):
     """
     Reads in cluster series, tsne data, marker expression without complements
     at given paths.
+
+    Inputs
+    ------
+
+    cls_path: File name that has the cluster names. Tab-separated.
+    tsne_path: File name that has the tSNE/UMAP coordinates. Tab-separated.
+    marker_path: File name that has the cell counts. Tab-separated. Rows are
+    gene names, and columns are cell barcodes.
+    gene_path: File name of a given gene list (optional).
+    D: Downsampling (int).
+    tenx: 
+    online: 
+    skipvis: Decides whether or not to skip visualization (int). 1 means skip, 0 means
+    plot the given coordinates at the end. Default is 0 (coordinates will be plotted).
     """
+
+    ############################
+    #                          #
+    #     Read input files     #
+    #                          #
+    ############################
+
+    # Read in the cluster data, assuming file is tab-separated
+    print('Reading in cluster data...')
     cls_ser = pd.read_csv(
         cls_path, sep='\t', index_col=0, names=['cell', 'cluster'], squeeze=True
     )
+
+    # If a comma is found in the dataframe index, assume the file is comma-separated
+    # Read in file again
     if ',' in cls_ser.index[1]:
         cls_ser = pd.read_csv(
         cls_path, sep=',', index_col=0, names=['cell', 'cluster'], squeeze=True )
 
+    # If user wants to skip visualizations, set 'tsne' variable to None
     if skipvis == 1:
         tsne = None
-        pass
+
+    # Otherwise, load the tSNE/UMAP data
     else:
+
+        # Read in the coordinate data, assuming file is tab-separated
+        # Define three column names: 'cell', 'tSNE_1', and 'tSNE_2'
+        print('Reading in tSNE/UMAP data...')
         tsne = pd.read_csv(
             tsne_path, sep='\t', index_col=0, names=['cell', 'tSNE_1', 'tSNE_2']
         )
+
+        # If the file is not tab-separated, then the first coordinate will be a NaN value
+        # Read in file again, assuming it's comma-separated
         if np.isnan(tsne['tSNE_1'][0]):
             tsne = pd.read_csv(
             tsne_path, sep=',', index_col=0, names=['cell', 'tSNE_1', 'tSNE_2'] )
 
+    # Define start time
     start_= time.time()
+
+    # Load count matrix data
     tenx = int(tenx)
+
+    # If a 10X file is given, then create the count matrix
     if tenx == 1:
-        print('Loading 10X matrix')
-        mat = scipy.io.mmread(marker_path+"matrix.mtx")
-        features_path = marker_path + "genes.tsv"
-        gene_names = [row[1] for row in csv.reader(open(features_path), delimiter="\t")]
-        barcodes_path = marker_path + "barcodes.tsv"
-        barcodes = [row[0] for row in csv.reader(open(barcodes_path), delimiter="\t")]
-        #construct pandas dataframe w/ the pieces (gene names, barcodes, counts in sparse form)
-        matrix = pd.DataFrame(index = gene_names, columns = barcodes )
-        now = time.time()
-        print('assembling expression matrix')
-        for i,j,v in zip(mat.row, mat.col, mat.data):
-            matrix.iat[i,j] = v
-        matrix.fillna(0,inplace=True)
-        noww = time.time()
-        print(str(noww-now) + ' seconds')
-        print('size: ' + str(matrix.shape))
-        no_complement_marker_exp = matrix
-        no_complement_marker_exp.rename_axis('cell',axis=1,inplace=True)
+
+        print('Creating 10X matrix...')
+
+        # Create an Adata object, just like in the Scanpy tutorial
+        adata = sc.read_10x_mtx(marker_path)
+
+        # Save the count matrix as a Numpy array with integer values
+        adata.X = adata.X.toarray()
+        matrix = adata.X.astype(int)
+
+        # Create count matrix as pandas dataframe
+        matrix = pd.DataFrame(index = adata.obs_names, columns = adata.var_names, data = matrix)
+
+        # By default, rows are cell barcodes and columns are genes
+        # We will transpose these
+
+        # Rename matrix to 'marker expression with no complement data'
+        no_complement_marker_exp = matrix.T
+        no_complement_marker_exp.rename_axis('cell', axis=1, inplace=True)
+
+    # If no 10X files are given, read in the count matrix
     else:
 
-        #Should allow either tab OR comma delimited formats
+        print('Reading in count matrix...')
+
+        # Should allow either tab OR comma delimited formats
         try:
             no_complement_marker_exp = pd.read_csv(
-                marker_path,sep='\t', index_col=0
-                ).rename_axis('cell',axis=1)
+                marker_path, sep='\t', index_col=0
+                ).rename_axis('cell', axis=1)
             if len(no_complement_marker_exp.columns) == 0:
                 raise Exception
             elif len(no_complement_marker_exp.index) == 0:
@@ -150,14 +197,39 @@ def read_data(cls_path, tsne_path, marker_path, gene_path, D, tenx, online,skipv
             no_complement_marker_exp = pd.read_csv(
                 marker_path,sep=',', index_col=0
                 ).rename_axis('cell',axis=1)
+
+    #############################
+    #                           #
+    #     Check input files     #
+    #                           #
+    #############################
+
+    # Print number of cells/genes in cluster file and count matrix
+    print('There are {} cells in the cluster file.'.format(len(cls_ser)))
+    print('There are {} cells in the count matrix.'.format(len(no_complement_marker_exp.columns)))
+    print('There are {} genes in the count matrix.'.format(len(no_complement_marker_exp.index)))
+
+    # If cells will be plotted, check coordinate file
+    if tsne is not None:
+        print('There are {} cells in the coordinate file.'.format(len(tsne)))
+
+        # Assert statement, making sure coordinate and cluster files have the same cell barcodes
+        err_msg = 'Cluster and coordinate files do not have the same cell barcodes'
+        assert all(cls_ser.index == tsne.index), err_msg
+
+    # Check to make sure cell barcodes in count matrix and cluster file are the same
+    # If they are not the same, drop the cells in the cluster file that are different
            
-    if no_complement_marker_exp.shape[1] == cls_ser.shape[0]:
-        pass
-    else:
+    # If the number of cells don't match,
+    if no_complement_marker_exp.shape[1] != cls_ser.shape[0]:
+
+        # For each index in the cluster file,
         for index,row in cls_ser.iteritems():
-            if str(index) in list(no_complement_marker_exp):
-                continue
-            else:
+
+            # If the index is not in the count matrix,
+            if str(index) not in list(no_complement_marker_exp):
+
+                # Drop the barcode from the cluster file
                 cls_ser.drop(labels=index,inplace=True)
     
     #gene list filtering
@@ -167,12 +239,12 @@ def read_data(cls_path, tsne_path, marker_path, gene_path, D, tenx, online,skipv
     no_complement_marker_exp = no_complement_marker_exp.loc[~no_complement_marker_exp.index.duplicated(keep='first')]
     #gene filtering
     #-------------#
-    if gene_path is None:
-        pass
-    else:
 
-        #read the genes
-        #Compatible with single line comma list OR one per line no commas OR mix of both
+    # If a gene list is given,
+    if gene_path is not None:
+
+        # Read the genes
+        # Compatible with single line comma list OR one per line no commas OR mix of both
         master_gene_list = []
         with open(gene_path, "r") as genes:
             lines = genes.readlines()
