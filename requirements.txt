@@ -13,7 +13,7 @@ kiwisolver==1.0.1
 matplotlib==3.0.0
 more-itertools==4.2.0
 nbformat==4.4.0
-numpy==1.14.5
+numpy==1.22.0
 pandas==0.23.3
 plotly==2.7.0
 pluggy==0.6.0
